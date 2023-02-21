@@ -9,7 +9,22 @@ const Login = () => {
 
 const handleSubmit = () => {
     try {
-        
+        fetch(process.env.REACT_APP_AUTH_URL,
+        {
+            method:"POST",
+            headers:{
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                userId: userInput.email,
+                password: userInput.password
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) =>
+            {
+           
+            });
     } catch (error) {
         
     }
