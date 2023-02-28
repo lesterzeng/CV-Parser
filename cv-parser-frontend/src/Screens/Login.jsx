@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
@@ -6,44 +6,46 @@ const Login = () => {
     let navigate = useNavigate()
 
     const [userInput, setUserInput] = useState({
-        username:"",
-        password:""
+        username: "",
+        password: ""
     })
 
-const handleSubmit = () => {
-    try {
-        fetch(process.env.REACT_APP_AUTH_URL + `/login`,
-        {
-            method:"POST",
-            headers:{
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username: userInput.username,
-                password: userInput.password
-            }),
-        })
-            .then((res) => res.json())
-            .then((data) =>
-            {
-                const token = data.accessToken
-                sessionStorage.setItem('token', token)
-                console.log("Logged in and token is in sessionStorage")
-                navigate(`/dashboard`)
-            });
-    } catch (error) {
-        console.log("Invalid Username / Password")
-        // to include Toastify 
-        navigate(`/login`)
+    const handleSubmit = () => {
+        try {
+            fetch(process.env.REACT_APP_AUTH_URL + `/login`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        username: userInput.username,
+                        password: userInput.password
+                    }),
+                })
+                .then((res) => res.json())
+                .then((data) => {
+                    const token = data.accessToken
+                    sessionStorage.setItem('token', token)
+                    console.log("Logged in and token is in sessionStorage")
+
+                    navigate(`/dashboard`)
+
+                    //navigate(/cvparse/cand)
+                });
+        } catch (error) {
+            console.log("Invalid Username / Password")
+            // to include Toastify 
+            navigate(`/login`)
+        }
     }
-}
 
-const handleLogout = () => {
-    sessionStorage.removeItem('token')
-    console.log("Logged out")
+    const handleLogout = () => {
+        sessionStorage.removeItem('token')
+        console.log("Logged out")
 
-}
-return (
+    }
+    return (
         <div>
             <br></br>
             <br></br>
