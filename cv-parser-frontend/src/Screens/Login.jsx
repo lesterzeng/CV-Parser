@@ -26,10 +26,14 @@ const handleSubmit = () => {
             .then((res) => res.json())
             .then((data) =>
             {
+<<<<<<< HEAD
                 const token = data.accessToken
                 sessionStorage.setItem('token', token)
                 console.log("Logged in and token is in sessionStorage")
                 //navigate(/cvparse/cand)
+=======
+                
+>>>>>>> 7769897 (Created basic template for file export route:)
             });
     } catch (error) {
         console.log("Invalid Username / Password")
