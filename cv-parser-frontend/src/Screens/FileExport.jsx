@@ -1,20 +1,43 @@
 import React, { useState } from 'react';
-import { Box, Card, CardActions, CardContent, Typography, Button } from '@mui/material';
+import { Box, Card, CardActions, CardContent, Typography, Button, Checkbox, IconButton}
+    from '@mui/material';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import DeleteIcon from '@mui/icons-material/Delete';
 import "../css/FileExport.css"
+
+const label = { inputProps: { 'aria-label': 'person name' } };
 
 const mainBox = () => {
     return {
-        height:"100vh",
-        display:"flex",
-        justifyContent:"center",
-        alignItems:"center"
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
     }
 }
 
-const mainCard = () =>{
+const mainCard = () => {
     return {
-        minWidth: 275,
+        minWidth: "90vw",
+        height: "80vh",
         bgcolor: "#8d69c7"
+    }
+}
+
+const secCard = () => {
+    return {
+        minWidth: "90%",
+        height: "5%",
+        bgcolor: "#af8aeb"
+    }
+}
+
+const checkboxStyle = () => {
+    return {
+        color: "#8d69c7",
+        '&.Mui-checked': {
+            color: "#6a2b8c",
+        },
     }
 }
 
@@ -24,24 +47,41 @@ const FileExport = () => {
         <Box sx={mainBox}>
             <Card sx={mainCard}>
                 <CardContent>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        Word of the Day
-                    </Typography>
-                    <Typography variant="h5" component="div">
-                        benevolent
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        adjective
-                    </Typography>
-                    <Typography variant="body2">
-                        well meaning and kindly.
-                        <br />
-                        {'"a benevolent smile"'}
-                    </Typography>
+                    {/* secondary/inner card */}
+                    <Card sx={secCard}>
+                        <CardContent>
+                            <table class="card-table">
+                                <tr>
+                                    <td>
+                                    <Checkbox {...label} defaultChecked
+                                        sx={checkboxStyle} /> 
+                                    </td>
+                                    <td>
+                                        <p>John Doe</p>
+                                    </td>
+                                    <td>
+                                        <p>
+                                            johndoe@email.com
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p>
+                                            98762345
+                                        </p>
+                                    </td>
+                                    <td align="center">
+                                        <IconButton aria-label="edit">
+                                            <EditRoundedIcon/>
+                                        </IconButton>
+                                        <IconButton aria-label="delete">
+                                            <DeleteIcon/>
+                                        </IconButton>
+                                    </td>
+                                </tr>
+                            </table>
+                        </CardContent>
+                    </Card>
                 </CardContent>
-                <CardActions>
-                    <Button size="small">Learn More</Button>
-                </CardActions>
             </Card>
         </Box>
     );
