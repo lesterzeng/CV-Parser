@@ -8,8 +8,8 @@ import FileExport from './Screens/FileExport';
 function Router() {
   return (
     <Routes>
-      <Route path="/export" element={<FileExport/>}></Route>
       <Route path="/login" element={<Login />}></Route> 
+      <Route path="/export" element={<FileExport/>}></Route>
       <Route path="/upload" element={<FileUploader />}></Route> 
     </Routes>
   );
