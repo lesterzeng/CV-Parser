@@ -2,7 +2,6 @@ body{
     background-color: #ceb0ff;
 }
 
-<<<<<<< HEAD
 .card-table{
     width:100%;
     table-layout: fixed;
@@ -11,5 +10,7 @@ body{
 .col-width{
     width:33%;
 }
-=======
->>>>>>> 7769897 (Created basic template for file export route:)
+
+.card-table{
+    width:100%;
+}
