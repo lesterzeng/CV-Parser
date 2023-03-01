@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { Box, Card, CardActions, CardContent, Typography, Button, Checkbox, IconButton}
+import { Box, Card, CardActions, CardContent, Typography, Button, Checkbox, IconButton, FormControl }
     from '@mui/material';
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
+import HomeIcon from '@mui/icons-material/Home';
+import SearchIcon from '@mui/icons-material/Search'
+import ChevronRight from '@mui/icons-material/ChevronRight'
 import "../css/FileExport.css"
 
 const label = { inputProps: { 'aria-label': 'person name' } };
@@ -16,10 +23,26 @@ const mainBox = () => {
     }
 }
 
+const topBox = () => {
+    return {
+        margin: "0 0 10px 0",
+        display: "flex",
+        justifyContent: "space-between"
+    }
+}
+
+const bottomBox = () => {
+    return {
+        margin: " 10px 0 0 0",
+        display: "flex",
+        flexDirection : "row-reverse"
+    }
+}
+
 const mainCard = () => {
     return {
         minWidth: "90vw",
-        height: "80vh",
+        height: "70vh",
         bgcolor: "#8d69c7"
     }
 }
@@ -34,56 +57,119 @@ const secCard = () => {
 
 const checkboxStyle = () => {
     return {
-        color: "#8d69c7",
+        color: "#461d5c",
         '&.Mui-checked': {
             color: "#6a2b8c",
         },
     }
 }
 
+const btnStyle = () => {
+    return {
+        margin: "0 10px 0 10px",
+        height: "100%",
+        bgcolor: "#461d5c",
+        '&:hover': {
+            bgcolor: "#6a2b8c",
+        }
+    }
+}
+
+const cardHeader = () => {
+    return {
+        marginLeft: "20px"
+    }
+}
+
 const FileExport = () => {
 
     return (
-        <Box sx={mainBox}>
-            <Card sx={mainCard}>
-                <CardContent>
-                    {/* secondary/inner card */}
-                    <Card sx={secCard}>
+        <div>
+            <Box sx={mainBox}>
+                <div>
+                    <Box sx={topBox}>
+                        <Button variant="contained" startIcon={<HomeIcon />}
+                            size="large" sx={btnStyle}>
+                            Back to Dashboard
+                        </Button>
+                        <div>
+                            <FormControl>
+                                <InputLabel htmlFor="search-input">
+                                    Search
+                                </InputLabel>
+                                <OutlinedInput
+                                    id="search-input"
+                                    type="text"
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <SearchIcon />
+                                        </InputAdornment>
+                                    }
+                                    label="Search"
+                                />
+                            </FormControl>
+                            <Button variant="contained" size="large"
+                                sx={btnStyle}>
+                                Search
+                            </Button>
+                        </div>
+                    </Box>
+                    <Card sx={mainCard}>
                         <CardContent>
-                            <table class="card-table">
-                                <tr>
-                                    <td>
-                                    <Checkbox {...label} defaultChecked
-                                        sx={checkboxStyle} /> 
-                                    </td>
-                                    <td>
-                                        <p>John Doe</p>
-                                    </td>
-                                    <td>
-                                        <p>
-                                            johndoe@email.com
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <p>
-                                            98762345
-                                        </p>
-                                    </td>
-                                    <td align="center">
-                                        <IconButton aria-label="edit">
-                                            <EditRoundedIcon/>
-                                        </IconButton>
-                                        <IconButton aria-label="delete">
-                                            <DeleteIcon/>
-                                        </IconButton>
-                                    </td>
-                                </tr>
-                            </table>
+                            <Box sx={cardHeader}>
+                                <h1>1 / 4 Profiles Created</h1>
+                                <Checkbox {...label}
+                                    defaultChecked
+                                    sx={checkboxStyle} />
+                                <span>Select All</span>
+                            </Box>
+
+                            {/* secondary/inner card */}
+                            <Card sx={secCard}>
+                                <CardContent>
+                                    <table class="card-table">
+                                        <tr>
+                                            <td>
+                                                <Checkbox {...label}
+                                                    defaultChecked
+                                                    sx={checkboxStyle} />
+                                            </td>
+                                            <td>
+                                                <p>John Doe</p>
+                                            </td>
+                                            <td>
+                                                <p>
+                                                    johndoe@email.com
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p>
+                                                    98762345
+                                                </p>
+                                            </td>
+                                            <td align="center">
+                                                <IconButton aria-label="edit">
+                                                    <EditRoundedIcon />
+                                                </IconButton>
+                                                <IconButton aria-label="delete">
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </CardContent>
+                            </Card>
                         </CardContent>
                     </Card>
-                </CardContent>
-            </Card>
-        </Box>
+                    <Box sx={bottomBox}>
+                        <Button variant="contained" endIcon={<ChevronRight />}
+                            size="large" sx={btnStyle}>
+                            Export
+                        </Button>
+                    </Box>
+                </div>
+            </Box>
+        </div>
     );
 };
 
