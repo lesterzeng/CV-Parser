@@ -161,6 +161,12 @@ const FileExport = () => {
         console.log("selected exports: ",selectExports)
     }
 
+    // read and update state
+    useEffect(() => {
+        setInfos(pData)
+    }, [])
+
+    console.log("look here [infos]: ", infos)
     return (
         <div>
             <Box sx={mainBox}>
