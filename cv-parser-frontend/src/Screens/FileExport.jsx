@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Card, CardActions, CardContent, Typography, Button, Checkbox, IconButton, FormControl }
     from '@mui/material';
 import TextField from '@mui/material/TextField';
@@ -11,6 +11,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import "../css/FileExport.css"
+
+// importing placeholder data for test
+import pData from '../placeholder.json';
 
 const label = { inputProps: { 'aria-label': 'person name' } };
 
@@ -35,13 +38,13 @@ const bottomBox = () => {
     return {
         margin: " 10px 0 0 0",
         display: "flex",
-        flexDirection : "row-reverse"
+        flexDirection: "row-reverse"
     }
 }
 
 const mainCard = () => {
     return {
-        minWidth: "90vw",
+        width: "90vw",
         height: "70vh",
         bgcolor: "#8d69c7"
     }
@@ -51,7 +54,8 @@ const secCard = () => {
     return {
         minWidth: "90%",
         height: "5%",
-        bgcolor: "#af8aeb"
+        bgcolor: "#af8aeb",
+        margin:"5px 0 5px 0"
     }
 }
 
@@ -82,7 +86,15 @@ const cardHeader = () => {
 }
 
 const FileExport = () => {
+    // create state to import JSON placeholder
+    const [infos, setInfos] = useState([]);
 
+    // read and update state
+    useEffect(() => {
+        setInfos(pData)
+    }, [])
+
+    console.log("look here [infos]: ", infos)
     return (
         <div>
             <Box sx={mainBox}>
@@ -125,40 +137,89 @@ const FileExport = () => {
                             </Box>
 
                             {/* secondary/inner card */}
-                            <Card sx={secCard}>
+                            {infos.candidates.map((candidate) => {
+                                return (
+                                    <Card sx={secCard} key={candidate.id}>
+                                        <CardContent>
+                                            <table class="card-table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td className="col-width">
+                                                            <Checkbox {...label}
+                                                                defaultChecked
+                                                                sx={checkboxStyle} />
+                                                        </td>
+                                                        <td className="col-width">
+                                                            <p>
+                                                                {candidate.firstName} 
+                                                                <span> </span>
+                                                                {candidate.midName} 
+                                                                <span> </span>
+                                                                {candidate.lastName}
+                                                            </p>
+                                                        </td>
+                                                        <td className="col-width">
+                                                            <p>
+                                                            {candidate.email}
+                                                            </p>
+                                                        </td>
+                                                        <td className="col-width">
+                                                            <p>
+                                                            {candidate.phoneNumber}
+                                                            </p>
+                                                        </td>
+                                                        <td align="center" className="col-width">
+                                                            <IconButton aria-label="edit">
+                                                                <EditRoundedIcon />
+                                                            </IconButton>
+                                                            <IconButton aria-label="delete">
+                                                                <DeleteIcon />
+                                                            </IconButton>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </CardContent>
+                                    </Card>
+                                )
+                            })
+                            }
+                            {/* <Card sx={secCard}>
                                 <CardContent>
                                     <table class="card-table">
-                                        <tr>
-                                            <td>
-                                                <Checkbox {...label}
-                                                    defaultChecked
-                                                    sx={checkboxStyle} />
-                                            </td>
-                                            <td>
-                                                <p>John Doe</p>
-                                            </td>
-                                            <td>
-                                                <p>
-                                                    johndoe@email.com
-                                                </p>
-                                            </td>
-                                            <td>
-                                                <p>
-                                                    98762345
-                                                </p>
-                                            </td>
-                                            <td align="center">
-                                                <IconButton aria-label="edit">
-                                                    <EditRoundedIcon />
-                                                </IconButton>
-                                                <IconButton aria-label="delete">
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </td>
-                                        </tr>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <Checkbox {...label}
+                                                        defaultChecked
+                                                        sx={checkboxStyle} />
+                                                </td>
+                                                <td>
+                                                    <p>John Doe</p>
+                                                </td>
+                                                <td>
+                                                    <p>
+                                                        johndoe@email.com
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <p>
+                                                        98762345
+                                                    </p>
+                                                </td>
+                                                <td align="center">
+                                                    <IconButton aria-label="edit">
+                                                        <EditRoundedIcon />
+                                                    </IconButton>
+                                                    <IconButton aria-label="delete">
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </CardContent>
-                            </Card>
+                            </Card> */}
                         </CardContent>
                     </Card>
                     <Box sx={bottomBox}>

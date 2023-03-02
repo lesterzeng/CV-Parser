@@ -4,4 +4,9 @@ body{
 
 .card-table{
     width:100%;
+    table-layout: fixed;
+}
+
+.col-width{
+    width:33%;
 }
