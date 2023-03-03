@@ -159,14 +159,22 @@ const FileExport = () => {
                             {
                                 infos !== undefined ?
                                     // no issue rendering this
-                                    // Object.keys(infos).map(key => (
-                                    //     <p key={key}>{key}</p>
-                                    // ))
+                                    Object.keys(infos).map(key => {
+                                        console.log("key: ",key)
+                                        if(key === "candidates"){
+                                            console.log("inner key: ", infos[key])
+                                            return (
+                                                infos[key].map(c => (
+                                                    <p>{c.email}</p>
+                                                ))
+                                            )
+                                        }
+                                    })
 
                                     // issues with this. refreshing causes error.
-                                    infos.candidates.map(candidate => (
-                                        <p key={candidate.id}>{candidate.email}</p>
-                                    ))
+                                    // infos.candidates.map(candidate => (
+                                    //     <p key={candidate.id}>{candidate.email}</p>
+                                    // ))
 
                                     // infos.candidates.map(candidate => (
                                     //     <Card sx={secCard} key={candidate.id}>
