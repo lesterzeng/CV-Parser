@@ -100,13 +100,13 @@ const FileExport = () => {
                 headers:
                     { 'Content-Type': 'application/json' }
             })
-            .then(response => {
-                return response.json()
-            })
-            .then(data => {
-                console.log("data:", data)
-                setInfos(data)
-            })
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    console.log("data:", data)
+                    setInfos(data)
+                })
         } catch (error) {
             console.log(error)
         }
@@ -148,7 +148,7 @@ const FileExport = () => {
                         <CardContent>
                             <Box sx={cardHeader}>
                                 <h1>1 / 4 Profiles Created</h1>
-                                <Checkbox 
+                                <Checkbox
                                     {...label}
                                     defaultChecked
                                     sx={checkboxStyle} />
@@ -160,12 +160,54 @@ const FileExport = () => {
                                 infos !== undefined ?
                                     // no issue rendering this
                                     Object.keys(infos).map(key => {
-                                        console.log("key: ",key)
-                                        if(key === "candidates"){
+                                        console.log("key: ", key)
+                                        if (key === "candidates") {
                                             console.log("inner key: ", infos[key])
                                             return (
-                                                infos[key].map(c => (
-                                                    <p>{c.email}</p>
+                                                infos[key].map(candidate => (
+                                                    <Card sx={secCard} key={candidate.id}>
+                                                        <CardContent>
+                                                            <table class="card-table">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td className="col-width">
+                                                                            <Checkbox
+                                                                                {...label}
+                                                                                defaultChecked
+                                                                                sx={checkboxStyle} />
+                                                                        </td>
+                                                                        <td className="col-width">
+                                                                            <p>
+                                                                                {candidate.firstName}
+                                                                                <span> </span>
+                                                                                {candidate.midName}
+                                                                                <span> </span>
+                                                                                {candidate.lastName}
+                                                                            </p>
+                                                                        </td>
+                                                                        <td className="col-width">
+                                                                            <p>
+                                                                                {candidate.email}
+                                                                            </p>
+                                                                        </td>
+                                                                        <td className="col-width">
+                                                                            <p>
+                                                                                {candidate.phoneNumber}
+                                                                            </p>
+                                                                        </td>
+                                                                        <td align="center" className="col-width">
+                                                                            <IconButton aria-label="edit">
+                                                                                <EditRoundedIcon />
+                                                                            </IconButton>
+                                                                            <IconButton aria-label="delete">
+                                                                                <DeleteIcon />
+                                                                            </IconButton>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </CardContent>
+                                                    </Card>
                                                 ))
                                             )
                                         }
