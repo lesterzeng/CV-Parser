@@ -166,7 +166,25 @@ const FileExport = () => {
         setInfos(pData)
     }, [])
 
-    console.log("look here [infos]: ", infos)
+    const retrieveData = async () => {
+        try {
+            await fetch("./placeholder.json", {
+                headers:
+                    { 'Content-Type': 'application/json' }
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+                console.log("data:", data)
+                setInfos(data)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    console.log(infos)
     return (
         <div>
             <Box sx={mainBox}>
