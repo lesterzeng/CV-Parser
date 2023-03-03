@@ -1,14 +1,14 @@
 import './App.css';
 import Login from './Screens/Login';
-import { Route, Routes } from 'react-router-dom'
-import Test from './Component/UploadFile/UploadFileTest';
+import FileUploader from './Screens/Upload';
+import {Route, Routes } from 'react-router-dom'
 
 
 function Router() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />}></Route>
-      <Route path="/fileTest" element={<Test />}></Route>
+    <Route path="/login" element={<Login />}></Route> 
+    <Route path="/upload" element={<FileUploader />}></Route> 
     </Routes>
   );
 }
