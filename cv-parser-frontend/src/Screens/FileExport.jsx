@@ -13,7 +13,7 @@ import ChevronRight from '@mui/icons-material/ChevronRight'
 import "../css/FileExport.css"
 
 // importing placeholder data for test
-import pData from '../placeholder.json';
+// import pData from '../placeholder.json';
 
 const label = { inputProps: { 'aria-label': 'person name' } };
 
@@ -55,7 +55,7 @@ const secCard = () => {
         minWidth: "90%",
         height: "5%",
         bgcolor: "#af8aeb",
-        margin:"5px 0 5px 0"
+        margin: "5px 0 5px 0"
     }
 }
 
@@ -91,10 +91,28 @@ const FileExport = () => {
 
     // read and update state
     useEffect(() => {
-        setInfos(pData)
+        retrieveData()
     }, [])
 
-    console.log("look here [infos]: ", infos)
+    const retrieveData = async () => {
+        try {
+            await fetch("./placeholder.json", {
+                headers:
+                    { 'Content-Type': 'application/json' }
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+                console.log("data:", data)
+                setInfos(data)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    console.log(infos)
     return (
         <div>
             <Box sx={mainBox}>
@@ -130,59 +148,72 @@ const FileExport = () => {
                         <CardContent>
                             <Box sx={cardHeader}>
                                 <h1>1 / 4 Profiles Created</h1>
-                                <Checkbox {...label}
+                                <Checkbox 
+                                    {...label}
                                     defaultChecked
                                     sx={checkboxStyle} />
                                 <span>Select All</span>
                             </Box>
 
                             {/* secondary/inner card */}
-                            {infos.candidates.map((candidate) => {
-                                return (
-                                    <Card sx={secCard} key={candidate.id}>
-                                        <CardContent>
-                                            <table class="card-table">
-                                                <tbody>
-                                                    <tr>
-                                                        <td className="col-width">
-                                                            <Checkbox {...label}
-                                                                defaultChecked
-                                                                sx={checkboxStyle} />
-                                                        </td>
-                                                        <td className="col-width">
-                                                            <p>
-                                                                {candidate.firstName} 
-                                                                <span> </span>
-                                                                {candidate.midName} 
-                                                                <span> </span>
-                                                                {candidate.lastName}
-                                                            </p>
-                                                        </td>
-                                                        <td className="col-width">
-                                                            <p>
-                                                            {candidate.email}
-                                                            </p>
-                                                        </td>
-                                                        <td className="col-width">
-                                                            <p>
-                                                            {candidate.phoneNumber}
-                                                            </p>
-                                                        </td>
-                                                        <td align="center" className="col-width">
-                                                            <IconButton aria-label="edit">
-                                                                <EditRoundedIcon />
-                                                            </IconButton>
-                                                            <IconButton aria-label="delete">
-                                                                <DeleteIcon />
-                                                            </IconButton>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </CardContent>
-                                    </Card>
-                                )
-                            })
+                            {
+                                infos !== undefined ?
+                                    // no issue rendering this
+                                    // Object.keys(infos).map(key => (
+                                    //     <p key={key}>{key}</p>
+                                    // ))
+
+                                    // issues with this. refreshing causes error.
+                                    infos.candidates.map(candidate => (
+                                        <p key={candidate.id}>{candidate.email}</p>
+                                    ))
+
+                                    // infos.candidates.map(candidate => (
+                                    //     <Card sx={secCard} key={candidate.id}>
+                                    //         <CardContent>
+                                    //             <table class="card-table">
+                                    //                 <tbody>
+                                    //                     <tr>
+                                    //                         <td className="col-width">
+                                    //                             <Checkbox 
+                                    //                         {...label}
+                                    //                             defaultChecked
+                                    //                             sx={checkboxStyle} />
+                                    //                         </td>
+                                    //                         <td className="col-width">
+                                    //                             <p>
+                                    //                                 {candidate.firstName}
+                                    //                                 <span> </span>
+                                    //                                 {candidate.midName}
+                                    //                                 <span> </span>
+                                    //                                 {candidate.lastName}
+                                    //                             </p>
+                                    //                         </td>
+                                    //                         <td className="col-width">
+                                    //                             <p>
+                                    //                                 {candidate.email}
+                                    //                             </p>
+                                    //                         </td>
+                                    //                         <td className="col-width">
+                                    //                             <p>
+                                    //                                 {candidate.phoneNumber}
+                                    //                             </p>
+                                    //                         </td>
+                                    //                         <td align="center" className="col-width">
+                                    //                             <IconButton aria-label="edit">
+                                    //                                 <EditRoundedIcon />
+                                    //                             </IconButton>
+                                    //                             <IconButton aria-label="delete">
+                                    //                                 <DeleteIcon />
+                                    //                             </IconButton>
+                                    //                         </td>
+                                    //                     </tr>
+                                    //                 </tbody>
+                                    //             </table>
+                                    //         </CardContent>
+                                    //     </Card>
+                                    // ))
+                                    : "bummer"
                             }
                             {/* <Card sx={secCard}>
                                 <CardContent>
