@@ -1,9 +1,8 @@
 import './App.css';
 import Login from './Screens/Login';
 import FileUploader from './Screens/Upload';
-import List from './Screens/List';
-import {Route, Routes } from 'react-router-dom'
-import TestList from './Screens/TestList';
+import { Route, Routes } from 'react-router-dom'
+import CandidateList from './Screens/CandidateList';
 
 
 function Router() {
@@ -11,8 +10,7 @@ function Router() {
     <Routes>
     <Route path="/login" element={<Login />}></Route> 
     <Route path="/upload" element={<FileUploader />}></Route> 
-    <Route path="/list" element={<List />}></Route> 
-    <Route path="/testlist" element={<TestList />}></Route> 
+    <Route path="/candidatelist" element={<CandidateList />}></Route> 
     </Routes>
   );
 }
