@@ -148,6 +148,19 @@ const FileExport = () => {
             setCkboxes(updateCkboxes)
         }
     }
+
+    const handleExportButton = () => {
+        console.log("export")
+        const selectedValues = ckboxes.filter((ckbox) => 
+        ckbox.name !== "select-all" && ckbox.checked
+        ).map(data => data.name)
+        console.log(selectedValues)
+
+        const selectExports = infos.candidates.filter((info)=>selectedValues.includes(info.id.toString()))
+
+        console.log("selected exports: ",selectExports)
+    }
+
     return (
         <div>
             <Box sx={mainBox}>
@@ -363,7 +376,7 @@ const FileExport = () => {
                     </Card>
                     <Box sx={bottomBox}>
                         <Button variant="contained" endIcon={<ChevronRight />}
-                            size="large" sx={btnStyle}>
+                            size="large" sx={btnStyle} onClick={handleExportButton}>
                             Export
                         </Button>
                     </Box>
