@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Card, CardActions, CardContent, Typography, Button, Checkbox, IconButton, FormControl }
+import { Box, Card, CardActions, CardContent, Typography, Button, Checkbox, IconButton, FormControl, FormControlLabel }
     from '@mui/material';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
@@ -106,13 +106,43 @@ const FileExport = () => {
                 .then(data => {
                     console.log("data:", data)
                     setInfos(data)
+                    // console.log("look here: ", populateCkboxState(data))
+                    populateCkboxState(data)
                 })
         } catch (error) {
             console.log(error)
         }
     }
 
-    console.log(infos)
+    // state for checkboxes
+    const [ckboxes, setCkboxes] = useState([
+        { name: "select-all", checked: true }
+    ])
+
+    const populateCkboxState = (datas) => {
+        console.log("checkbox populating")
+
+        if (datas && datas.candidates) {
+            console.log("data key", datas.candidates)
+            const newCkboxes = []
+            datas.candidates.forEach((candidate) => {
+                console.log({ name: candidate.id, checked: true })
+                const newCkbox = { name: candidate.id.toString(), checked: true }
+                newCkboxes.push(newCkbox)
+            })
+            setCkboxes([...ckboxes, ...newCkboxes])
+        }
+
+    }
+
+    const handleCheckedValues = (event) => {
+        console.log("checkbox: ", event.target.checked)
+        const { name, checked } = event.target
+        const updateCkboxes = ckboxes.map((ckbox) =>
+            ckbox.name === name ? { ...ckbox, checked } : ckbox
+        )
+        setCkboxes(updateCkboxes)
+    }
     return (
         <div>
             <Box sx={mainBox}>
@@ -148,11 +178,24 @@ const FileExport = () => {
                         <CardContent>
                             <Box sx={cardHeader}>
                                 <h1>1 / 4 Profiles Created</h1>
-                                <Checkbox
+                                {/* <Checkbox
                                     {...label}
                                     defaultChecked
-                                    sx={checkboxStyle} />
-                                <span>Select All</span>
+                                    sx={checkboxStyle} 
+                                    onChange={handleCheckedValues}
+                                    /> */}
+                                <FormControlLabel
+                                    label="Select All"
+                                    control={
+                                        <Checkbox
+                                            name="select-all"
+                                            defaultChecked
+                                            sx={checkboxStyle}
+                                            onChange={handleCheckedValues}
+                                        />
+                                    }
+                                />
+                                {/* <span>Select All</span> */}
                             </Box>
 
                             {/* secondary/inner card */}
@@ -172,9 +215,12 @@ const FileExport = () => {
                                                                     <tr>
                                                                         <td className="col-width">
                                                                             <Checkbox
-                                                                                {...label}
+                                                                                inputProps={{ 'aria-label': candidate.id }}
                                                                                 defaultChecked
-                                                                                sx={checkboxStyle} />
+                                                                                sx={checkboxStyle}
+                                                                                name={candidate.id}
+                                                                                onChange={handleCheckedValues}
+                                                                            />
                                                                         </td>
                                                                         <td className="col-width">
                                                                             <p>
