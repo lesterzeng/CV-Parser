@@ -188,6 +188,15 @@ const FileExport = () => {
                                     checked={ckboxes[0]["checked"]}
                                     sx={checkboxStyle} 
                                     onChange={handleCheckedValues}
+                                    indeterminate={
+                                        ckboxes.filter(
+                                            (ckbox) => ckbox.checked)
+                                            .length !== ckboxes.length 
+                                        && 
+                                        ckboxes.filter(
+                                            (ckbox) => ckbox.checked)
+                                            .length > 2
+                                        }
                                     />
                                 {/* <FormControlLabel
                                     label="Select All"
