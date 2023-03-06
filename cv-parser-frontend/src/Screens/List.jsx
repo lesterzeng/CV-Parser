@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import EditForm from "./EditForm";
 import parsedData from "../test-parseddata.json";
 
-function List() {
+export default function List() {
   const [data, setData] = useState(parsedData);
   const [editIndex, setEditIndex] = useState(null);
 
@@ -74,4 +74,3 @@ function List() {
   );
 }
 
-export default List;
