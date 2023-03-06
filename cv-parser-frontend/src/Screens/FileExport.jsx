@@ -104,9 +104,7 @@ const FileExport = () => {
                     return response.json()
                 })
                 .then(data => {
-                    console.log("data:", data)
                     setInfos(data)
-                    // console.log("look here: ", populateCkboxState(data))
                     populateCkboxState(data)
                 })
         } catch (error) {
@@ -120,13 +118,9 @@ const FileExport = () => {
     ])
 
     const populateCkboxState = (datas) => {
-        console.log("checkbox populating")
-
         if (datas && datas.candidates) {
-            console.log("data key", datas.candidates)
             const newCkboxes = []
             datas.candidates.forEach((candidate) => {
-                console.log({ name: candidate.id, checked: true })
                 const newCkbox = { name: candidate.id.toString(), checked: true }
                 newCkboxes.push(newCkbox)
             })
@@ -137,11 +131,22 @@ const FileExport = () => {
 
     const handleCheckedValues = (event) => {
         console.log("checkbox: ", event.target.checked)
-        const { name, checked } = event.target
-        const updateCkboxes = ckboxes.map((ckbox) =>
-            ckbox.name === name ? { ...ckbox, checked } : ckbox
-        )
-        setCkboxes(updateCkboxes)
+        if (event.target.name === "select-all") {
+            console.log("select all")
+            const { checked } = event.target
+            const updateCkboxes = ckboxes.map((ckbox) =>
+                ({ ...ckbox, checked })
+            )
+            setCkboxes(updateCkboxes)
+        }
+        else {
+            console.log("individual")
+            const { name, checked } = event.target
+            const updateCkboxes = ckboxes.map((ckbox) =>
+                ckbox.name === name ? { ...ckbox, checked } : ckbox
+            )
+            setCkboxes(updateCkboxes)
+        }
     }
     return (
         <div>
@@ -178,13 +183,13 @@ const FileExport = () => {
                         <CardContent>
                             <Box sx={cardHeader}>
                                 <h1>1 / 4 Profiles Created</h1>
-                                {/* <Checkbox
-                                    {...label}
-                                    defaultChecked
+                                <Checkbox
+                                    name="select-all"
+                                    checked={ckboxes[0]["checked"]}
                                     sx={checkboxStyle} 
                                     onChange={handleCheckedValues}
-                                    /> */}
-                                <FormControlLabel
+                                    />
+                                {/* <FormControlLabel
                                     label="Select All"
                                     control={
                                         <Checkbox
@@ -194,8 +199,8 @@ const FileExport = () => {
                                             onChange={handleCheckedValues}
                                         />
                                     }
-                                />
-                                {/* <span>Select All</span> */}
+                                /> */}
+                                <span>Select All</span>
                             </Box>
 
                             {/* secondary/inner card */}
@@ -203,9 +208,7 @@ const FileExport = () => {
                                 infos !== undefined ?
                                     // no issue rendering this
                                     Object.keys(infos).map(key => {
-                                        console.log("key: ", key)
                                         if (key === "candidates") {
-                                            console.log("inner key: ", infos[key])
                                             return (
                                                 infos[key].map(candidate => (
                                                     <Card sx={secCard} key={candidate.id}>
@@ -216,7 +219,7 @@ const FileExport = () => {
                                                                         <td className="col-width">
                                                                             <Checkbox
                                                                                 inputProps={{ 'aria-label': candidate.id }}
-                                                                                defaultChecked
+                                                                                checked={ckboxes[ckboxes.findIndex(c => c.name === (candidate.id.toString()))]['checked']}
                                                                                 sx={checkboxStyle}
                                                                                 name={candidate.id}
                                                                                 onChange={handleCheckedValues}
