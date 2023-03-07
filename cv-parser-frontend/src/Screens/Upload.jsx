@@ -179,7 +179,8 @@ function FileUploader() {
 
       const headers = {
          Authorization: `Bearer ${sessionStorage.getItem('token') }`,
-         "Content-Type": "application/json",
+         // "Content-Type": "application/json",
+         // "Content-Type": "multipart/form-data" ,
       };
       fetch("http://localhost:8080/api/upload/up", {
          method: "POST",
@@ -292,7 +293,7 @@ function FileUploader() {
    };
 
    return (
-      <form onSubmit={handleSubmit}>
+      <form encType="multipart/form-data" onSubmit={handleSubmit}>
          {uploadMode && (
             <div>
                <div
