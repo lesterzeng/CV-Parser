@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Upload.css";
+import { useNavigate } from 'react-router-dom';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -12,6 +13,9 @@ import {
 } from "@mui/material";
 
 function FileUploader() {
+
+   let navigate = useNavigate()
+
    const dummyError = {
       errors: [
          {
@@ -334,6 +338,7 @@ function FileUploader() {
             console.log(response)
             response.json().then((data)=>{
                console.log(data)
+               navigate("/cvparse/cand", { state: { data } })
             })
          } else {
             // Handle other errors
@@ -345,6 +350,7 @@ function FileUploader() {
    }
 
    return (
+      
       // <form encType="multipart/form-data" onSubmit={handleSubmit}>
       <form onSubmit={handleSubmit}>
          {uploadMode && (

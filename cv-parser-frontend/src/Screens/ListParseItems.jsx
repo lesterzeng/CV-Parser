@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
@@ -11,7 +11,8 @@ import ChevronRight from '@mui/icons-material/ChevronRight'
 
 const ListParseItems = () =>
 {
-
+    const location = useLocation();
+    const data = location.state.data;
 
     const bottomBox = () =>
     {
@@ -58,30 +59,42 @@ const ListParseItems = () =>
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect (() => {
-        try {
-            fetch(process.env.REACT_APP_PARSE_URL, {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((res) => res.json())
-                .then((data) =>
-                {
-                    console.log(data);
-                    const failedRows = data.filter((row) => !row.email || !row.firstName || !row.lastName);
-                    setFailedData(failedRows);
-                    const successfulRows = data.filter((row) => row.email && row.firstName && row.lastName);
-                    setParseData(successfulRows);
-                    setLoading(false);
-                });
-        } catch (error) {
+    setParseData(data)
+
+    const dataWithTempKey = parseData.map((candidate, index) =>
+    {
+        return {
+            ...candidate,
+            tempKey: `temp_${index}`, // generate temporary key using the index
+        };
+    });
+
+    // useEffect (() => {
+    //     try {
+    //         fetch(process.env.REACT_APP_PARSE_URL, {
+    //             method: 'GET',
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //                 'Content-Type': 'application/json',
+    //             },
+    //         })
+    //             .then((res) => res.json())
+    //             .then((data) =>
+    //             {
+    //                 console.log(data);
+    //                 const failedRows = data.filter((row) => !row.email || !row.firstName || !row.lastName);
+    //                 setFailedData(failedRows);
+    //                 const successfulRows = data.filter((row) => row.email && row.firstName && row.lastName);
+    //                 setParseData(successfulRows);
+    //                 setLoading(false);
+    //             });
+    //     } catch (error) {
             
-        }
-    },[])
-    
+    //     }
+    // },[])
+
+
+
     const [expanded, setExpanded] = useState(false);
 
     const handleChange = (panel) => (event, isExpanded) =>
