@@ -322,8 +322,31 @@ function FileUploader() {
       setSelectedFiles([]);
    };
 
+   const handleParse = () =>{
+      const headers = {
+         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      };
+      fetch("http://localhost:8080/api/parse/uploaded", {
+         method: "POST",
+         headers: headers,
+      }).then((response) => {
+         if (response.ok) {
+            console.log(response)
+            response.json().then((data)=>{
+               console.log(data)
+            })
+         } else {
+            // Handle other errors
+         }
+      })
+      .catch((error) => {
+         alert("Parse failed");
+      });
+   }
+
    return (
-      <form encType="multipart/form-data" onSubmit={handleSubmit}>
+      // <form encType="multipart/form-data" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
          {uploadMode && (
             <div>
                <div
@@ -354,10 +377,10 @@ function FileUploader() {
                <button type="submit" disabled={loading}>
                   {loading ? "Uploading..." : "Upload"}
                </button>
-               <button type="button" onClick={handleClear}>
+               <button type="button" onClick={handleClear} disabled={loading}>
                   Clear Selected Files
                </button>
-               <button type="button" onClick={handleCancel}>
+               <button type="button" onClick={handleCancel} disabled={loading}>
                   Cancel Upload
                </button>
             </div>
@@ -495,7 +518,7 @@ function FileUploader() {
                   Add More Files
                </button>
                <button type="button">Quick Create</button>
-               <button type="button">Parse & Edit</button>
+               <button type="button" onClick={handleParse}>Parse & Edit</button>
             </div>
          )}
       </form>
