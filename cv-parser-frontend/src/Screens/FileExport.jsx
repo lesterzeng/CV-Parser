@@ -252,12 +252,11 @@ const FileExport = () => {
             width: 100,
             sortable: false,
             renderCell: (params) => (
-                <button
-                    className='btn btn-sm btn-primary'
+                <IconButton aria-label="edit"
                 // onClick={() => handleEdit(params.row.id)}
                 >
-                    Edit
-                </button>
+                    <EditRoundedIcon/>
+                </IconButton>
             ),
         },
         {
@@ -266,12 +265,11 @@ const FileExport = () => {
             width: 100,
             sortable: false,
             renderCell: (params) => (
-                <button
-                    className='btn btn-sm btn-danger'
+                <IconButton aria-label="delete"
                 // onClick={() => handleDelete(params.row.id, params.row.firstName)}
                 >
-                    Delete
-                </button>
+                    <DeleteIcon/>
+                </IconButton>
             ),
         },
     ];
@@ -286,6 +284,22 @@ const FileExport = () => {
         console.log("selectedRows: ", selectedRowData);
         setSelectedExportData(selectedRowData)
     }
+
+    // for search input
+    const [searchInput, setSearchInput] = useState('');
+
+    const handleSearch = (event) =>
+    {
+        setSearchInput(event.target.value);
+    };
+
+    const filteredData = infos.filter(
+        (row) =>
+            row.email.toLowerCase().includes(searchInput.toLowerCase()) ||
+            row.phoneNumber.toLowerCase().includes(searchInput.toLowerCase()) ||
+            row.firstName.toLowerCase().includes(searchInput.toLowerCase()) ||
+            row.lastName.toLowerCase().includes(searchInput.toLowerCase())
+    );
 
     return (
         <div>
@@ -310,12 +324,9 @@ const FileExport = () => {
                                         </InputAdornment>
                                     }
                                     label="Search"
+                                    onChange={handleSearch}
                                 />
                             </FormControl>
-                            <Button variant="contained" size="large"
-                                sx={btnStyle}>
-                                Search
-                            </Button>
                         </div>
                     </Box>
                     <Card sx={mainCard}>
@@ -332,7 +343,7 @@ const FileExport = () => {
                                     ) : (
                                         <div style={{ height: 500, width: '100%' }}>
                                             <DataGrid
-                                                rows={infos}
+                                                rows={filteredData}
                                                 columns={columns}
                                                 pageSize={5}
                                                 rowsPerPageOptions={[5]}
