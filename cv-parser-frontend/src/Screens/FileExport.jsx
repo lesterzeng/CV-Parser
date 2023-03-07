@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Card, CardActions, CardContent, Typography, Button, Checkbox, IconButton, FormControl, FormControlLabel }
     from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
@@ -87,6 +88,16 @@ const cardHeader = () => {
 }
 
 const FileExport = () => {
+    // from react-dom to reroute
+    let navigate = useNavigate()
+    // simple toek check
+    const token = sessionStorage.getItem('token');
+    if (!token)
+    {
+
+        navigate(`/login`);
+    }
+
     // loading state
     const [loading, setLoading] = useState(true);
     // create state to import JSON placeholder
@@ -99,16 +110,22 @@ const FileExport = () => {
 
     const retrieveData = async () => {
         try {
-            await fetch("./placeholder.json", {
-                headers:
-                    { 'Content-Type': 'application/json' }
+            await fetch(process.env.REACT_APP_PARSE_URL, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
             })
                 .then(response => {
                     return response.json()
                 })
                 .then(data => {
-                    setInfos(data)
-                    // populateCkboxState(data)
+                    console.log("retriveData: ", data)
+                    // const filterData = data.filter((row) => !row.email && !row.firstName && !row.lastName);
+                    // console.log(filterData)
+                    const successfulRows = data.filter((row) => row.email && row.firstName && row.lastName);
+                    setInfos(successfulRows)
                     setLoading(false);
                 })
         } catch (error) {
@@ -118,11 +135,8 @@ const FileExport = () => {
 
     const handleExportButton = () => {
         console.log("export")
-        if(selectedCheckboxes > 0){
-            const selectExports = infos.candidates.filter(
-                (info) => selectedCheckboxes.includes(info.id)
-            )
-            console.log("selected exports: ", selectExports)
+        if(selectedExportData.length > 0){
+            console.log("selected exports: ", selectedExportData)
         }
         else{
             alert("No profiles selected for export.")
@@ -220,11 +234,15 @@ const FileExport = () => {
         },
     ];
 
-    const [selectedCheckboxes, setSelectedCheckboxes] = useState()
+    const [selectedExportData, setSelectedExportData] = useState()
 
     const handleCheckbox = (ids) => {
-        console.log("handling liao")
-        setSelectedCheckboxes(ids)
+        console.log("handling liao: ", ids)
+        const selectedIDs = new Set(ids);
+        const selectedRowData = infos.filter((row) =>
+            selectedIDs.has(row.id));
+        console.log("selectedRows: ", selectedRowData);
+        setSelectedExportData(selectedRowData)
     }
 
     return (
@@ -272,7 +290,7 @@ const FileExport = () => {
                                     ) : (
                                         <div style={{ height: 500, width: '100%' }}>
                                             <DataGrid
-                                                rows={infos.candidates}
+                                                rows={infos}
                                                 columns={columns}
                                                 pageSize={5}
                                                 rowsPerPageOptions={[5]}
