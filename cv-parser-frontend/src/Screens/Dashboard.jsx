@@ -3,9 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import UploadButton from '../Component/UploadButton';
+import SearchBox from '../Component/SearchBox';
+import "../Component/UploadSearch.css"
 import NavBar from '../Component/Navbar';
+import ExportButton from '../Component/ExportButton';
 
-const ListParseItems = () =>
+const Dashboard = () =>
 {
 
     let navigate = useNavigate()
@@ -17,13 +21,18 @@ const ListParseItems = () =>
         navigate(`/login`);
     }
 
+    
+
     const [parseData, setParseData] = useState([]);
     const [failedData, setFailedData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchInput, setSearchInput] = useState('');
 
-    useEffect (() => {
-        try {
+    useEffect(() =>
+    {
+        try
+        {
             fetch(process.env.REACT_APP_PARSE_URL, {
                 method: 'GET',
                 headers: {
@@ -41,11 +50,12 @@ const ListParseItems = () =>
                     setParseData(successfulRows);
                     setLoading(false);
                 });
-        } catch (error) {
-            
+        } catch (error)
+        {
+
         }
-    },[])
-    
+    }, [])
+
     const [expanded, setExpanded] = useState(false);
 
     const handleChange = (panel) => (event, isExpanded) =>
@@ -58,9 +68,12 @@ const ListParseItems = () =>
         navigate(`/edit/${id}`);
     };
 
-    const handleDelete = (id, firstName) => {
-        try {
-            if (window.confirm(`Are you sure you want to delete profile: ${firstName}?`)){
+    const handleDelete = (id, firstName) =>
+    {
+        try
+        {
+            if (window.confirm(`Are you sure you want to delete profile: ${firstName}?`))
+            {
                 fetch(process.env.REACT_APP_PARSE_URL + `/${id}`, {
                     method: "DELETE",
                     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -73,15 +86,28 @@ const ListParseItems = () =>
                         setParseData("")
                     })
             }
-        } catch (error) {
+        } catch (error)
+        {
             setError(error.message);
         }
     }
 
+    const handleSearch = (event) =>
+    {
+        setSearchInput(event.target.value);
+    };
+
+    const filteredData = parseData.filter(
+        (row) =>
+            row.email.toLowerCase().includes(searchInput.toLowerCase()) ||
+            row.phoneNumber.toLowerCase().includes(searchInput.toLowerCase()) ||
+            row.firstName.toLowerCase().includes(searchInput.toLowerCase()) ||
+            row.lastName.toLowerCase().includes(searchInput.toLowerCase())
+    );
 
     const columns = [
 
- 
+
         {
             field: 'fullName',
             headerName: 'Full name',
@@ -97,7 +123,7 @@ const ListParseItems = () =>
             headerName: 'Email',
             width: 220,
         },
-        
+
         {
             field: 'phoneNumber',
             headerName: 'Contact',
@@ -108,12 +134,6 @@ const ListParseItems = () =>
             field: 'createdOn',
             headerName: 'Date Uploaded',
             width: 180,
-            valueGetter: (params) =>
-                new Date(params.row.createdOn).toLocaleDateString("en-US", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                }),
         },
 
         {
@@ -129,7 +149,7 @@ const ListParseItems = () =>
                     Edit
                 </button>
             ),
-        }, 
+        },
         {
             field: 'delete',
             headerName: '',
@@ -146,26 +166,26 @@ const ListParseItems = () =>
         },
     ];
 
-    
-    
+
+
 
     return (
+        
         <div>
-            <NavBar />
-            <h1>Parsing Results</h1>
-            
-                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                <AccordionSummary style={{ backgroundColor: 'lightblue' }} aria-controls="panel1-content" id="panel1-header" expandIcon={<ExpandMoreIcon />}>
-                    <Typography>{loading ? "Loading information..." : `${parseData.length} File(s) Successful Parsing`}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography>
+            <NavBar/>
+            <h1>Dashboard</h1>
+            <div className="button-container">
+                <UploadButton />
+                <SearchBox handleSearch={handleSearch} />
+            </div>
+
+            <br></br>
                         {loading ? (
                             'Fetching profiles...'
                         ) : (
-                            <div style={{ height: 400, width: '100%' }}>
+                            <div style={{ height: 500, width: '100%' }}>
                                 <DataGrid
-                                    rows={parseData}
+                                    rows={filteredData}
                                     columns={columns}
                                     pageSize={5}
                                     rowsPerPageOptions={[5]}
@@ -173,39 +193,13 @@ const ListParseItems = () =>
                                 />
                             </div>
                         )}
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-                <AccordionSummary style={{ backgroundColor: 'lightblue' }} aria-controls="panel2-content" id="panel2-header" expandIcon={<ExpandMoreIcon />}>
-                    <Typography>{loading ? "Loading information..." : `${failedData.length} File(s) Failed Parsing - Need More Information`}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography>
-                        {loading ? (
-                            'Fetching profiles...'
-                        ) : (
-                            <div style={{ height: 400, width: '100%' }}>
-                                <DataGrid
-                                    rows={failedData}
-                                    columns={columns}
-                                    pageSize={5}
-                                    rowsPerPageOptions={[5]}
-                                    checkboxSelection
-                                />
-                            </div>
-                        )}
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
-            {error && (
-                <Typography style={{ color: 'red' }}>
-                    Items failed to parse: {error}
-                </Typography>
-            )}
-                
+            <div className="export-button-container">
+                <ExportButton />
+            </div>
+        
+
         </div>
     );
 };
 
-export default ListParseItems;
+export default Dashboard;

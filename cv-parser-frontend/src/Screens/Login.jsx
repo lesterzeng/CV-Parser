@@ -29,7 +29,7 @@ const handleSubmit = () => {
                 const token = data.accessToken
                 sessionStorage.setItem('token', token)
                 console.log("Logged in and token is in sessionStorage")
-                // navigate(`/cvparse/cand`)
+                navigate(`/cvparse/cand`)
             });
     } catch (error) {
         console.log("Invalid Username / Password")
@@ -41,7 +41,6 @@ const handleSubmit = () => {
 const handleLogout = () => {
     sessionStorage.removeItem('token')
     console.log("Logged out")
-
 }
 
 
