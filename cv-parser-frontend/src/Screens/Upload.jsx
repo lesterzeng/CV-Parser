@@ -322,6 +322,25 @@ function FileUploader() {
       setSelectedFiles([]);
    };
 
+   const handleParse = () =>{
+      fetch("http://localhost:8080/api/parse/uploaded", {
+         method: "POST",
+         // headers: headers,
+      }).then((response) => {
+         if (response.ok) {
+            console.log(response)
+            response.json().then((data)=>{
+               console.log(data)
+            })
+         } else {
+            // Handle other errors
+         }
+      })
+      .catch((error) => {
+         alert("Parse failed");
+      });
+   }
+
    return (
       // <form encType="multipart/form-data" onSubmit={handleSubmit}>
       <form onSubmit={handleSubmit}>
@@ -496,7 +515,7 @@ function FileUploader() {
                   Add More Files
                </button>
                <button type="button">Quick Create</button>
-               <button type="button">Parse & Edit</button>
+               <button type="button" onClick={handleParse}>Parse & Edit</button>
             </div>
          )}
       </form>
