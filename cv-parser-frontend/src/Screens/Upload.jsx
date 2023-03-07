@@ -323,9 +323,12 @@ function FileUploader() {
    };
 
    const handleParse = () =>{
+      const headers = {
+         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      };
       fetch("http://localhost:8080/api/parse/uploaded", {
          method: "POST",
-         // headers: headers,
+         headers: headers,
       }).then((response) => {
          if (response.ok) {
             console.log(response)
