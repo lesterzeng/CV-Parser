@@ -13,6 +13,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import "../css/FileExport.css"
+// psPDF library
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 
 // importing placeholder data for test
 // import pData from '../placeholder.json';
@@ -92,8 +95,7 @@ const FileExport = () => {
     let navigate = useNavigate()
     // simple toek check
     const token = sessionStorage.getItem('token');
-    if (!token)
-    {
+    if (!token) {
 
         navigate(`/login`);
     }
@@ -121,7 +123,7 @@ const FileExport = () => {
                     return response.json()
                 })
                 .then(data => {
-                    console.log("retriveData: ", data)
+                    // console.log("retriveData: ", data)
                     // const filterData = data.filter((row) => !row.email && !row.firstName && !row.lastName);
                     // console.log(filterData)
                     const successfulRows = data.filter((row) => row.email && row.firstName && row.lastName);
@@ -135,15 +137,55 @@ const FileExport = () => {
 
     const handleExportButton = () => {
         console.log("export")
-        if(selectedExportData.length > 0){
-            console.log("selected exports: ", selectedExportData)
+        if (selectedExportData.length > 0) {
+            exportingProcess()
+            // console.log("selected exports: ", selectedExportData)
         }
-        else{
+        else {
             alert("No profiles selected for export.")
         }
     }
 
-    console.log(infos)
+    const exportingProcess = () => {
+        const doc = new jsPDF()
+
+        const tableData = selectedExportData.map((data)=>{
+            const fullName = data.firstName + " " + data.midName + " " +data.lastName
+            return [fullName, data.email, data.phoneNumber , data.workExp, data.recentCompanies]
+        })
+
+        console.log("print :", tableData)
+
+        autoTable(doc, {
+            head: [['Full Name', 'Email', 'Phone Number', 'Work Exp.', 'Skills', 'Recent Companies']],
+            body: tableData,
+        })
+
+        const uniqueName = uniqueGenerator();
+        doc.save(`Candidates_${uniqueName}.pdf`)
+    }
+
+    const uniqueGenerator = () => {
+        const date = new Date()
+
+        let day = ("0" + date.getDate()).slice(-2)
+        let month = ("0" + (date.getMonth() + 1)).slice(-2)
+        let year = date.getFullYear()
+
+        let currentDate = year + month + day
+        // console.log(currentDate)
+
+        let hours = ("0" + date.getHours()).slice(-2)
+        let minutes = ("0" + date.getMinutes()).slice(-2)
+        let seconds = ("0" + date.getSeconds()).slice(-2)
+        let milliseconds = date.getMilliseconds()
+
+        let currentTime = hours + minutes + seconds + milliseconds
+        // console.log(currentTime)
+        return `${currentDate}_${currentTime}`
+    }
+
+    // console.log(infos)
 
     // const handleEdit = (id) =>
     // {
@@ -305,7 +347,7 @@ const FileExport = () => {
                     </Card>
                     <Box sx={bottomBox}>
                         <Button variant="contained" endIcon={<ChevronRight />}
-                            size="large" sx={btnStyle} 
+                            size="large" sx={btnStyle}
                             onClick={handleExportButton}
                         >
                             Export
