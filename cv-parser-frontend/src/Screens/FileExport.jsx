@@ -17,6 +17,8 @@ import "../css/FileExport.css"
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 
+import NavBar from '../Component/Navbar';
+
 // importing placeholder data for test
 // import pData from '../placeholder.json';
 
@@ -24,7 +26,7 @@ const label = { inputProps: { 'aria-label': 'person name' } };
 
 const mainBox = () => {
     return {
-        height: "100vh",
+        height: "90vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
@@ -301,13 +303,20 @@ const FileExport = () => {
             row.lastName.toLowerCase().includes(searchInput.toLowerCase())
     );
 
+    const handleDashboardRoute = () => {
+        navigate(`/dashboard`)
+    }
+
     return (
         <div>
+            <NavBar/>
             <Box sx={mainBox}>
                 <div>
                     <Box sx={topBox}>
                         <Button variant="contained" startIcon={<HomeIcon />}
-                            size="large" sx={btnStyle}>
+                            size="large" sx={btnStyle}
+                            onClick={handleDashboardRoute}
+                        >
                             Back to Dashboard
                         </Button>
                         <div>
