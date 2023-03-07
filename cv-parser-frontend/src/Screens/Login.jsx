@@ -29,7 +29,7 @@ const handleSubmit = () => {
                 const token = data.accessToken
                 sessionStorage.setItem('token', token)
                 console.log("Logged in and token is in sessionStorage")
-                //navigate(/cvparse/cand)
+                navigate(`/dashboard`)
             });
     } catch (error) {
         console.log("Invalid Username / Password")
