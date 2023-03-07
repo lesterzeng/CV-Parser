@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Upload.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -34,6 +34,36 @@ function FileUploader() {
    const [expanded, setExpanded] = useState(false);
 
    const fileInputRef = useRef(null);
+
+   useEffect(() => {
+      const headers = {
+         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+         "Content-Type": "application/json",
+      };
+      fetch("http://localhost:8080/api/upload/cancel", {
+         method: "GET",
+         headers: headers,
+      })
+         .then((response) => {
+            if (response.ok) {
+               setErrorList(dummyError);
+            } else if (response.status === 400) {
+               // Handle bad request
+               response.json().then((data) => {
+                  console.log(data); // Log the error message returned from the server
+               });
+            } else {
+               // Handle other errors
+            }
+            setSelectedFiles([]);
+         })
+         .catch((error) => {
+            alert("Reset failed");
+         });
+      // .finally(() => {
+      //    setLoading(false);
+      // });
+   }, []);
 
    const handleAccordionChange = () => {
       setExpanded(!expanded);
@@ -178,7 +208,7 @@ function FileUploader() {
       }
 
       const headers = {
-         Authorization: `Bearer ${sessionStorage.getItem('token') }`,
+         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
          // "Content-Type": "application/json",
          // "Content-Type": "multipart/form-data" ,
       };
@@ -235,7 +265,7 @@ function FileUploader() {
 
    const handleCancel = () => {
       const headers = {
-         Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
          "Content-Type": "application/json",
       };
       if (
