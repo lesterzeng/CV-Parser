@@ -1,37 +1,49 @@
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
 
+    let navigate = useNavigate()
+
     const [userInput, setUserInput] = useState({
-        userId:"",
+        username:"",
         password:""
     })
 
 const handleSubmit = () => {
     try {
-        fetch(process.env.REACT_APP_AUTH_URL,
+        fetch(process.env.REACT_APP_AUTH_URL + `/login`,
         {
             method:"POST",
             headers:{
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                userId: userInput.email,
+                username: userInput.username,
                 password: userInput.password
             }),
         })
             .then((res) => res.json())
             .then((data) =>
             {
-           
+                const token = data.accessToken
+                sessionStorage.setItem('token', token)
+                console.log("Logged in and token is in sessionStorage")
+                navigate(`/dashboard`)
             });
     } catch (error) {
-        
+        console.log("Invalid Username / Password")
+        // to include Toastify 
+        navigate(`/login`)
     }
 }
 
+const handleLogout = () => {
+    sessionStorage.removeItem('token')
+    console.log("Logged out")
 
-    return (
+}
+return (
         <div>
             <br></br>
             <br></br>
@@ -45,7 +57,7 @@ const handleSubmit = () => {
                 {/* <!-- Email input --> */}
                 <div className="form-outline mb-4">
                     <label className="form-label" >UserID</label>
-                    <input type="email" className="form-control" onChange={e => setUserInput({ ...userInput, userId: e.target.value })} />
+                    <input type="email" className="form-control" onChange={e => setUserInput({ ...userInput, username: e.target.value })} />
 
                 </div>
 
@@ -58,6 +70,7 @@ const handleSubmit = () => {
 
                 {/* <!-- Submit button --> */}
                 <button type="button" className="btn btn-primary btn-block mb-4" onClick={handleSubmit}>Sign in</button>
+                <button type="button" className="btn btn-primary btn-block mb-4" onClick={handleLogout}>Test Log Out</button>
             </form>
         </div>
     );
