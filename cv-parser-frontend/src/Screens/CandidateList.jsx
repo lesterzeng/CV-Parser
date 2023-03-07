@@ -11,10 +11,21 @@ export default function CandidateList() {
     };
   });
 
-  function handleSave(updatedData, tempKey) {
-    // Add the edited data to the candidates list
-    const newCandidate = { ...updatedData, tempKey };
-    setCandidates([...candidates, newCandidate]);
+  function handleSave(tempKey, formData) {
+    const index = candidatesWithTempKey.findIndex(candidate => candidate.tempKey === tempKey);
+   
+    if (index === -1) {
+      console.error(`Candidate with tempKey ${tempKey} not found`);
+      return;
+    }
+     const updatedCandidate = {
+      ...candidatesWithTempKey[index],
+      ...formData,
+      tempKey: tempKey
+    };
+
+    candidatesWithTempKey[index] = updatedCandidate;
+    setCandidates(candidatesWithTempKey);
   }
 
   return (

@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import { width } from "@mui/system";
 
 export default function EditForm({ data, onSave, onCancel }) {
   const [formData, setFormData] = useState(data);
@@ -15,162 +20,334 @@ export default function EditForm({ data, onSave, onCancel }) {
   function handleSubmit(event) {
     event.preventDefault();
     onSave(formData);
-    console.log(formData)
+    // let str = JSON.stringify(formData, null, 4);
+    // console.log("EditForm stringify formData:" + str);
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <table>
-        <tbody>
-          <tr>
-            <td>First Name:</td>
-            <td>
-              <input
-                type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Middle Name:</td>
-            <td>
-              <input
-                type="text"
-                name="midName"
-                value={formData.midName}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Last Name:</td>
-            <td>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Email:</td>
-            <td>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Phone Number:</td>
-            <td>
-              <input
-                type="tel"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Work Experience:</td>
-            <td>
-              <input
-                type="text"
-                name="workExp"
-                value={formData.workExp}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Jobs List Id:</td>
-            <td>
-              <input
-                type="text"
-                name="jobsListId"
-                value={formData.jobsListId}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Skill 1:</td>
-            <td>
-              <input
-                type="text"
-                name="skill1"
-                value={formData.skill1}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Skill 2:</td>
-            <td>
-              <input
-                type="text"
-                name="skill2"
-                value={formData.skill2}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Skill 2:</td>
-            <td>
-              <input
-                type="text"
-                name="skill2"
-                value={formData.skill2}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Company 1:</td>
-            <td>
-              <input
-                type="text"
-                name="company1"
-                value={formData.company1}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Company 2:</td>
-            <td>
-              <input
-                type="text"
-                name="company2"
-                value={formData.company2}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Company 3:</td>
-            <td>
-              <input
-                type="text"
-                name="company3"
-                value={formData.company3}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button type="submit">Save</button>
-      <button type="button" onClick={onCancel}>
-        Cancel
-      </button>
+    <form onSubmit={handleSubmit} >
+      <Box 
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 1, width: "25ch" },
+        }}
+      >
+        <h2>Personal Particulars </h2>
+        <div>
+          <TextField
+            id="outlined-helperText"
+            label="First Name"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            defaultValue={formData.firstName}
+            type="text"
+            name="firstName"
+            onChange={handleChange}
+          />
+          <TextField
+            id="outlined-helperText"
+            label="Middle Name"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            defaultValue={formData.midName}
+            type="text"
+            name="midName"
+            onChange={handleChange}
+          />
+          <TextField
+            id="outlined-helperText"
+            label="Last Name"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            defaultValue={formData.lastName}
+            type="text"
+            name="lastName"
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <TextField
+            id="outlined-helperText"
+            label="Email"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            defaultValue={formData.email}
+            type="email"
+            name="email"
+            onChange={handleChange}
+          />
+          <TextField
+            id="outlined-helperText"
+            label="Phone Number"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            defaultValue={formData.phoneNumber}
+            type="tel"
+            name="phoneNumber"
+            onChange={handleChange}
+          />
+          <TextField
+            id="outlined-helperText"
+            label="Work Experience:"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            defaultValue={formData.workExp}
+            type="text"
+            name="workExp"
+            onChange={handleChange}
+          />
+        </div>
+
+        <h2>Skills</h2>
+
+        <div>
+          <TextField
+            id="filled-helperText"
+            label="Skill 1"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            defaultValue={formData.skill1}
+            variant="filled"
+            type="text"
+            name="skill1"
+            onChange={handleChange}
+          />
+
+          <TextField
+            id="filled-helperText"
+            label="Skill 2"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            defaultValue={formData.skill2}
+            variant="filled"
+            type="text"
+            name="skill2"
+            onChange={handleChange}
+          />
+
+          <TextField
+            id="filled-helperText"
+            label="Skill 3"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            defaultValue={formData.skill3}
+            variant="filled"
+            type="text"
+            name="skill3"
+            onChange={handleChange}
+          />
+        </div>
+
+        <h2>Company #1</h2>
+
+        <div>
+          <TextField
+            id="filled-helperText"
+            label="Company Name"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company1.name}
+            variant="filled"
+            type="text"
+            name="company1Name"
+            onChange={handleChange}
+          />
+
+          <TextField
+            id="filled-helperText"
+            label="Date Joined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company1.joinYear}
+            variant="filled"
+            type="date"
+            name="company1joinYear"
+            onChange={handleChange}
+          />
+
+          <TextField
+            id="filled-helperText"
+            label="End Date"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company1.leaveYear}
+            variant="filled"
+            type="date"
+            name="company1leaveYear"
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <TextField
+            id="filled-helperText"
+            label="Reason for Leaving"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company1.reasonForLeaving}
+            variant="filled"
+            type="text"
+            name="company1ReasonForLeaving"
+            onChange={handleChange}
+          />
+        </div>
+
+        <h2>Company #2</h2>
+
+        <div>
+          <TextField
+            id="filled-helperText"
+            label="Company Name"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company2.name}
+            variant="filled"
+            type="text"
+            name="company2Name"
+            onChange={handleChange}
+          />
+
+          <TextField
+            id="filled-helperText"
+            label="Date Joined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company2.joinYear}
+            variant="filled"
+            type="date"
+            name="company2joinYear"
+            onChange={handleChange}
+          />
+
+          <TextField
+            id="filled-helperText"
+            label="End Date"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company2.leaveYear}
+            variant="filled"
+            type="date"
+            name="company2leaveYear"
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <TextField
+            id="filled-helperText"
+            label="Reason for Leaving"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company2.reasonForLeaving}
+            variant="filled"
+            type="text"
+            name="company2ReasonForLeaving"
+            onChange={handleChange}
+          />
+        </div>
+
+        <h2>Company #3</h2>
+
+        <div>
+          <TextField
+            id="filled-helperText"
+            label="Company Name"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company3.name}
+            variant="filled"
+            type="text"
+            name="company3Name"
+            onChange={handleChange}
+          />
+
+          <TextField
+            id="filled-helperText"
+            label="Date Joined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company3.joinYear}
+            variant="filled"
+            type="date"
+            name="company3joinYear"
+            onChange={handleChange}
+          />
+
+          <TextField
+            id="filled-helperText"
+            label="End Date"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company3.leaveYear}
+            variant="filled"
+            type="date"
+            name="company3leaveYear"
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <TextField
+            id="filled-helperText"
+            label="Reason for Leaving"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // defaultValue={formData.company3.reasonForLeaving}
+            variant="filled"
+            type="text"
+            name="company3ReasonForLeaving"
+            onChange={handleChange}
+          />
+        </div>
+
+        <h2>Job List Id</h2>
+
+        <div>
+          <TextField
+            id="filled-helperText"
+            label="Job List Id"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            defaultValue={formData.jobsListId}
+            variant="filled"
+            type="text"
+            name="jobsListId"
+            onChange={handleChange}
+          />
+        </div>
+      </Box>
+
+      <Stack spacing={2} direction="row-reverse">
+        <Button variant="contained" type="button" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button variant="contained" type="submit">
+          Save
+        </Button>
+      </Stack>
     </form>
   );
 }

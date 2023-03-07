@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import EditForm from "./EditForm";
+import Button from "@mui/material/Button";
 
 export default function EditButton({ candidate, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
-  console.log("candidate.tempKey" + candidate.tempKey)
+  console.log("edit button candidate.tempKey: " + candidate.tempKey)
 
   function handleSave(formData) {
     onSave(candidate.tempKey, formData);
-    console.log("candidate.tempKey: " + candidate.tempKey)
+
+    // console.log("handlesave candidate.tempKey: " + candidate.tempKey)
+    // let str = JSON.stringify(formData, null, 4);
+    // console.log("stringify formData:" + str);
+
     setIsEditing(false);
   }
 
@@ -18,8 +23,8 @@ export default function EditButton({ candidate, onSave }) {
 
   return (
     <div>
-      <button onClick={() => setIsEditing(true)}>Edit</button>
-      <Modal
+      <Button onClick={() => setIsEditing(true)}>Edit</Button>
+      <Modal 
         isOpen={isEditing}
         onRequestClose={handleCancel}
         ariaHideApp={false}

@@ -3,7 +3,7 @@
     "candidates": [
         {
             "id": 1,
-            "email":"johndoe@email.com",
+            "email": "johndoe@email.com",
             "firstName": "John",
             "midName": "Little",
             "lastName": "Doe",
@@ -13,7 +13,7 @@
         },
         {
             "id": 2,
-            "email":"janedamsel@email.com",
+            "email": "janedamsel@email.com",
             "firstName": "Jane",
             "midName": "Petite",
             "lastName": "Damsel",
@@ -23,7 +23,7 @@
         },
         {
             "id": 3,
-            "email":"terrytempes@email.com",
+            "email": "terrytempes@email.com",
             "firstName": "Terry",
             "midName": "Toa",
             "lastName": "Tempes",
@@ -33,7 +33,7 @@
         },
         {
             "id": 4,
-            "email":"minamoe@email.com",
+            "email": "minamoe@email.com",
             "firstName": "Mina",
             "midName": "Meina",
             "lastName": "Moe",
@@ -43,7 +43,7 @@
         },
         {
             "id": 5,
-            "email":"perryparr@email.com",
+            "email": "perryparr@email.com",
             "firstName": "Perry",
             "midName": "Popo",
             "lastName": "Parr",
@@ -53,3 +53,5 @@
         }
     ]
 }
+
+
