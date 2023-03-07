@@ -326,7 +326,19 @@ function FileUploader() {
       fetch("http://localhost:8080/api/parse/uploaded", {
          method: "POST",
          // headers: headers,
+      }).then((response) => {
+         if (response.ok) {
+            console.log(response)
+            response.json().then((data)=>{
+               console.log(data)
+            })
+         } else {
+            // Handle other errors
+         }
       })
+      .catch((error) => {
+         alert("Parse failed");
+      });
    }
 
    return (
