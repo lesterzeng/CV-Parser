@@ -35,19 +35,21 @@ const ListParseItems = () =>
         }
     }
 
-    const handleCreation = () =>
+    const handleCreation = (selectedIds) =>
     {
-        return null
+        console.log(selectedIds)
     }
-    
 
-    const handleCancel = () =>{
+
+    const handleCancel = () =>
+    {
         navigate(-1)
     }
 
     let navigate = useNavigate()
 
     const token = sessionStorage.getItem('token');
+
     if (!token)
     {
 
@@ -58,6 +60,7 @@ const ListParseItems = () =>
     const [failedData, setFailedData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selectedIds, setSelectedIds] = useState([]);
 
 
 
@@ -65,46 +68,25 @@ const ListParseItems = () =>
     {
         return {
             ...candidate,
-            tempKey: `temp_${index}`, // generate temporary key using the index
+            tempKey: parseInt(index, 10), // generate temporary key using the index
         };
     });
 
-    useEffect (() => {
-        // try {
-        //     fetch(process.env.REACT_APP_PARSE_URL, {
-        //         method: 'GET',
-        //         headers: {
-        //             Authorization: `Bearer ${token}`,
-        //             'Content-Type': 'application/json',
-        //         },
-        //     })
-        //         .then((res) => res.json())
-        //         .then((data) =>
-        //         {
-        //             console.log(data);
-        //             const failedRows = data.filter((row) => !row.email || !row.firstName || !row.lastName);
-        //             setFailedData(failedRows);
-        //             const successfulRows = data.filter((row) => row.email && row.firstName && row.lastName);
-        //             setParseData(successfulRows);
-        //             setLoading(false);
-        //         });
-        // } catch (error) {
-            
-        // }
+    useEffect(() =>
+    {
+        try
+        {
+            const failedRows = dataWithTempKey.filter((row) => !row.email || !row.firstName || !row.lastName || (row.email === "No Email") || (row.firstName === "No Name") || (row.lastName === "No Name"));
+            setFailedData(failedRows);
+            const successfulRows = dataWithTempKey.filter((row) => row.email && row.firstName && row.lastName && (row.email !== "No Email") && (row.firstName !== "No Name") && (row.lastName !== "No Name"));
+            setParseData(successfulRows);
+            setLoading(false);
+        } catch (error)
+        {
 
-        try {
-            console.log(dataWithTempKey)
-            const failedRows = dataWithTempKey.filter((row) => !row.email || !row.firstName || !row.lastName);
-                    setFailedData(failedRows);
-                    const successfulRows = dataWithTempKey.filter((row) => row.email && row.firstName && row.lastName);
-                    setParseData(successfulRows);
-                    setLoading(false);
-        } catch (error) {
-       
         }
-    },[])
+    }, [])
 
-// console.log(dataWithTempKey)
 
     const [expanded, setExpanded] = useState(false);
 
@@ -118,9 +100,12 @@ const ListParseItems = () =>
         navigate(`/edit/${id}`);
     };
 
-    const handleDelete = (id, firstName) => {
-        try {
-            if (window.confirm(`Are you sure you want to delete profile: ${firstName}?`)){
+    const handleDelete = (id, firstName) =>
+    {
+        try
+        {
+            if (window.confirm(`Are you sure you want to delete profile: ${firstName}?`))
+            {
                 fetch(process.env.REACT_APP_PARSE_URL + `/${id}`, {
                     method: "DELETE",
                     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -133,7 +118,8 @@ const ListParseItems = () =>
                         setParseData("")
                     })
             }
-        } catch (error) {
+        } catch (error)
+        {
             setError(error.message);
         }
     }
@@ -141,7 +127,7 @@ const ListParseItems = () =>
 
     const columns = [
 
- 
+
         {
             field: 'fullName',
             headerName: 'Full name',
@@ -157,7 +143,7 @@ const ListParseItems = () =>
             headerName: 'Email',
             width: 220,
         },
-        
+
         {
             field: 'phoneNumber',
             headerName: 'Contact',
@@ -184,12 +170,12 @@ const ListParseItems = () =>
             renderCell: (params) => (
                 <button
                     className='btn btn-sm btn-primary'
-                    onClick={() => handleEdit(params.row.id)}
+                    onClick={() => handleEdit(params.row.tempKey)}
                 >
                     Edit
                 </button>
             ),
-        }, 
+        },
         {
             field: 'delete',
             headerName: '',
@@ -198,7 +184,7 @@ const ListParseItems = () =>
             renderCell: (params) => (
                 <button
                     className='btn btn-sm btn-danger'
-                    onClick={() => handleDelete(params.row.id, params.row.firstName)}
+                    onClick={() => handleDelete(params.row.tempKey, params.row.firstName)}
                 >
                     Delete
                 </button>
@@ -206,47 +192,55 @@ const ListParseItems = () =>
         },
     ];
 
-    
-    
+    const [selectedRows, setSelectedRows] = useState([]);
+    const handleSelectionModelChange = (newSelection) =>
+    {
+        setSelectedRows(newSelection.selectionModel.map((tempKey) => tempKey.toString()));
+        console.log(selectedRows)
+    };
 
     return (
         <div>
             <NavBar />
             <h1>Parsing Results</h1>
-            
-                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+
+            <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                 <AccordionSummary style={{ backgroundColor: 'lightblue' }} aria-controls="panel1-content" id="panel1-header" expandIcon={<ExpandMoreIcon />}>
-                    <Typography>{loading ? "Loading information..." : `${parseData.length} File(s) Successful Parsing`}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography>
+                    <Typography component="span">{loading ? "Loading information..." : `${parseData.length} File(s) Successful Parsing`}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Typography component="span">
                         {loading ? (
                             'Fetching profiles...'
                         ) : (
                             <div style={{ height: 400, width: '100%' }}>
                                 <DataGrid
+                                    getRowId={(row) => row.tempKey}
                                     rows={parseData}
                                     columns={columns}
                                     pageSize={5}
                                     rowsPerPageOptions={[5]}
                                     checkboxSelection
+                                        onSelectionModelChange={handleSelectionModelChange}
+                                   
                                 />
                             </div>
                         )}
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                    </Typography>
+                </AccordionDetails>
+            </Accordion>
+            <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
                 <AccordionSummary style={{ backgroundColor: 'lightblue' }} aria-controls="panel2-content" id="panel2-header" expandIcon={<ExpandMoreIcon />}>
-                    <Typography>{loading ? "Loading information..." : `${failedData.length} File(s) Failed Parsing - Need More Information`}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography>
+                    <Typography component="span">{loading ? "Loading information..." : `${failedData.length} File(s) Failed Parsing - Need More Information`}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Typography component="span">
                         {loading ? (
                             'Fetching profiles...'
                         ) : (
                             <div style={{ height: 400, width: '100%' }}>
                                 <DataGrid
+                                    getRowId={(row) => row.tempKey}
                                     rows={failedData}
                                     columns={columns}
                                     pageSize={5}
@@ -255,17 +249,17 @@ const ListParseItems = () =>
                                 />
                             </div>
                         )}
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
+                    </Typography>
+                </AccordionDetails>
+            </Accordion>
             {error && (
-                <Typography style={{ color: 'red' }}>
+                <Typography component="span" style={{ color: 'red' }}>
                     Items failed to parse: {error}
                 </Typography>
             )}
-            <br/>
-            <br/>
-                <JobInfo/>
+            <br />
+            <br />
+            <JobInfo />
             <br />
             <Box sx={bottomBox}>
                 <Button variant="contained" endIcon={<ChevronRight />}
@@ -275,7 +269,7 @@ const ListParseItems = () =>
             </Box>
             <Box sx={bottomBox}>
                 <Button variant="contained" endIcon={<ChevronRight />}
-                    size="large" sx={btnStyle} onClick={handleCreation}>
+                    size="large" sx={btnStyle} onClick={() => handleCreation(selectedIds)}>
                     Create Profiles
                 </Button>
             </Box>
