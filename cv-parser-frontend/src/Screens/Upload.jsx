@@ -323,7 +323,8 @@ function FileUploader() {
    };
 
    return (
-      <form encType="multipart/form-data" onSubmit={handleSubmit}>
+      // <form encType="multipart/form-data" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
          {uploadMode && (
             <div>
                <div
@@ -354,10 +355,10 @@ function FileUploader() {
                <button type="submit" disabled={loading}>
                   {loading ? "Uploading..." : "Upload"}
                </button>
-               <button type="button" onClick={handleClear}>
+               <button type="button" onClick={handleClear} disabled={loading}>
                   Clear Selected Files
                </button>
-               <button type="button" onClick={handleCancel}>
+               <button type="button" onClick={handleCancel} disabled={loading}>
                   Cancel Upload
                </button>
             </div>
