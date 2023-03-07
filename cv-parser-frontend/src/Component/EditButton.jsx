@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import EditForm from "./EditForm";
 import Button from "@mui/material/Button";
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function EditButton({ candidate, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -23,7 +24,7 @@ export default function EditButton({ candidate, onSave }) {
 
   return (
     <div>
-      <Button onClick={() => setIsEditing(true)}>Edit</Button>
+      <Button onClick={() => setIsEditing(true)}><EditIcon/></Button>
       <Modal 
         isOpen={isEditing}
         onRequestClose={handleCancel}

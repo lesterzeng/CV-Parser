@@ -192,7 +192,7 @@ export default function EditForm({ data, onSave, onCancel }) {
         </div>
 
         <div>
-          <TextField
+          <TextField 
             id="filled-helperText"
             label="Reason for Leaving"
             InputLabelProps={{
