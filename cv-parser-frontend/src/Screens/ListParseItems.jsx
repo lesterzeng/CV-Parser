@@ -4,9 +4,45 @@ import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import NavBar from '../Component/Navbar';
+import JobInfo from '../Component/JobInfo';
+import Box from '@mui/material/Box';
+import { Button } from '@mui/material';
+import ChevronRight from '@mui/icons-material/ChevronRight'
 
 const ListParseItems = () =>
 {
+
+
+    const bottomBox = () =>
+    {
+        return {
+            margin: " 10px 0 0 0",
+            display: "flex",
+            flexDirection: "row-reverse"
+        }
+    }
+
+    const btnStyle = () =>
+    {
+        return {
+            margin: "0 10px 0 10px",
+            height: "100%",
+            bgcolor: "#461d5c",
+            '&:hover': {
+                bgcolor: "#6a2b8c",
+            }
+        }
+    }
+
+    const handleCreation = () =>
+    {
+        return null
+    }
+    
+
+    const handleCancel = () =>{
+        navigate(-1)
+    }
 
     let navigate = useNavigate()
 
@@ -203,7 +239,22 @@ const ListParseItems = () =>
                     Items failed to parse: {error}
                 </Typography>
             )}
-                
+            <br/>
+            <br/>
+                <JobInfo/>
+            <br />
+            <Box sx={bottomBox}>
+                <Button variant="contained" endIcon={<ChevronRight />}
+                    size="large" sx={btnStyle} onClick={handleCancel}>
+                    Cancel
+                </Button>
+            </Box>
+            <Box sx={bottomBox}>
+                <Button variant="contained" endIcon={<ChevronRight />}
+                    size="large" sx={btnStyle} onClick={handleCreation}>
+                    Create Profiles
+                </Button>
+            </Box>
         </div>
     );
 };
