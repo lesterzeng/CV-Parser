@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Card, CardActions, CardContent, Typography, Button, Checkbox, IconButton, FormControl, FormControlLabel }
     from '@mui/material';
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -86,6 +87,8 @@ const cardHeader = () => {
 }
 
 const FileExport = () => {
+    // loading state
+    const [loading, setLoading] = useState(true);
     // create state to import JSON placeholder
     const [infos, setInfos] = useState([]);
 
@@ -105,86 +108,120 @@ const FileExport = () => {
                 })
                 .then(data => {
                     setInfos(data)
-                    populateCkboxState(data)
+                    // populateCkboxState(data)
+                    setLoading(false);
                 })
         } catch (error) {
             console.log(error)
         }
     }
 
-    // state for checkboxes
-    const [ckboxes, setCkboxes] = useState([
-        { name: "select-all", checked: true }
-    ])
-
-    const populateCkboxState = (datas) => {
-        if (datas && datas.candidates) {
-            const newCkboxes = []
-            datas.candidates.forEach((candidate) => {
-                const newCkbox = { name: candidate.id.toString(), checked: true }
-                newCkboxes.push(newCkbox)
-            })
-            setCkboxes([...ckboxes, ...newCkboxes])
-        }
-
-    }
-
-    const handleCheckedValues = (event) => {
-        console.log("checkbox: ", event.target.checked)
-        if (event.target.name === "select-all") {
-            console.log("select all")
-            const { checked } = event.target
-            const updateCkboxes = ckboxes.map((ckbox) =>
-                ({ ...ckbox, checked })
-            )
-            setCkboxes(updateCkboxes)
-        }
-        else {
-            console.log("individual")
-            const { name, checked } = event.target
-            const updateCkboxes = ckboxes.map((ckbox) =>
-                ckbox.name === name ? { ...ckbox, checked } : ckbox
-            )
-            setCkboxes(updateCkboxes)
-        }
-    }
-
     const handleExportButton = () => {
         console.log("export")
-        const selectedValues = ckboxes.filter((ckbox) => 
-        ckbox.name !== "select-all" && ckbox.checked
-        ).map(data => data.name)
-        console.log(selectedValues)
 
-        const selectExports = infos.candidates.filter((info)=>selectedValues.includes(info.id.toString()))
+        const selectExports = infos.candidates.filter((info) => selectedCheckboxes.includes(info.id))
 
-        console.log("selected exports: ",selectExports)
-    }
-
-    // read and update state
-    useEffect(() => {
-        setInfos(pData)
-    }, [])
-
-    const retrieveData = async () => {
-        try {
-            await fetch("./placeholder.json", {
-                headers:
-                    { 'Content-Type': 'application/json' }
-            })
-            .then(response => {
-                return response.json()
-            })
-            .then(data => {
-                console.log("data:", data)
-                setInfos(data)
-            })
-        } catch (error) {
-            console.log(error)
-        }
+        console.log("selected exports: ", selectExports)
     }
 
     console.log(infos)
+
+    // const handleEdit = (id) =>
+    // {
+    //     navigate(`/edit/${id}`);
+    // };
+
+    // const handleDelete = (id, firstName) =>
+    // {
+    //     try
+    //     {
+    //         if (window.confirm(`Are you sure you want to delete profile: ${firstName}?`))
+    //         {
+    //             fetch(process.env.REACT_APP_PARSE_URL + `/${id}`, {
+    //                 method: "DELETE",
+    //                 headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+
+    //             })
+    //                 .then((res) => res.json())
+    //                 .then(data =>
+    //                 {
+    //                     setParseData([...parseData, data])
+    //                     setParseData("")
+    //                 })
+    //         }
+    //     } catch (error)
+    //     {
+    //         setError(error.message);
+    //     }
+    // }
+
+    const columns = [
+
+        {
+            field: 'fullName',
+            headerName: 'Full name',
+            description: 'This column has a value getter and is not sortable.',
+            sortable: false,
+            width: 140,
+            valueGetter: (params) =>
+                `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+        },
+
+        {
+            field: 'email',
+            headerName: 'Email',
+            width: 220,
+        },
+
+        {
+            field: 'phoneNumber',
+            headerName: 'Contact',
+            width: 120,
+        },
+
+        {
+            field: 'createdOn',
+            headerName: 'Date Uploaded',
+            width: 180,
+        },
+
+        {
+            field: 'edit',
+            headerName: '',
+            width: 100,
+            sortable: false,
+            renderCell: (params) => (
+                <button
+                    className='btn btn-sm btn-primary'
+                // onClick={() => handleEdit(params.row.id)}
+                >
+                    Edit
+                </button>
+            ),
+        },
+        {
+            field: 'delete',
+            headerName: '',
+            width: 100,
+            sortable: false,
+            renderCell: (params) => (
+                <button
+                    className='btn btn-sm btn-danger'
+                // onClick={() => handleDelete(params.row.id, params.row.firstName)}
+                >
+                    Delete
+                </button>
+            ),
+        },
+    ];
+
+    const [selectedCheckboxes, setSelectedCheckboxes] = useState()
+
+    const handleCheckbox = (ids) => {
+        console.log("handling liao")
+        setSelectedCheckboxes(ids)
+    }
+
     return (
         <div>
             <Box sx={mainBox}>
@@ -220,101 +257,34 @@ const FileExport = () => {
                         <CardContent>
                             <Box sx={cardHeader}>
                                 <h1>1 / 4 Profiles Created</h1>
-                                <Checkbox
-                                    name="select-all"
-                                    checked={ckboxes[0]["checked"]}
-                                    sx={checkboxStyle} 
-                                    onChange={handleCheckedValues}
-                                    indeterminate={
-                                        ckboxes.filter(
-                                            (ckbox) => ckbox.checked)
-                                            .length !== ckboxes.length 
-                                        && 
-                                        ckboxes.filter(
-                                            (ckbox) => ckbox.checked)
-                                            .length > 2
-                                        }
-                                    />
-                                {/* <FormControlLabel
-                                    label="Select All"
-                                    control={
-                                        <Checkbox
-                                            name="select-all"
-                                            defaultChecked
-                                            sx={checkboxStyle}
-                                            onChange={handleCheckedValues}
-                                        />
-                                    }
-                                /> */}
-                                <span>Select All</span>
                             </Box>
 
                             {/* secondary/inner card */}
-                            {
-                                infos !== undefined ?
-                                    // no issue rendering this
-                                    Object.keys(infos).map(key => {
-                                        if (key === "candidates") {
-                                            return (
-                                                infos[key].map(candidate => (
-                                                    <Card sx={secCard} key={candidate.id}>
-                                                        <CardContent>
-                                                            <table class="card-table">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td className="col-width">
-                                                                            <Checkbox
-                                                                                inputProps={{ 'aria-label': candidate.id }}
-                                                                                checked={ckboxes[ckboxes.findIndex(c => c.name === (candidate.id.toString()))]['checked']}
-                                                                                sx={checkboxStyle}
-                                                                                name={candidate.id}
-                                                                                onChange={handleCheckedValues}
-                                                                            />
-                                                                        </td>
-                                                                        <td className="col-width">
-                                                                            <p>
-                                                                                {candidate.firstName}
-                                                                                <span> </span>
-                                                                                {candidate.midName}
-                                                                                <span> </span>
-                                                                                {candidate.lastName}
-                                                                            </p>
-                                                                        </td>
-                                                                        <td className="col-width">
-                                                                            <p>
-                                                                                {candidate.email}
-                                                                            </p>
-                                                                        </td>
-                                                                        <td className="col-width">
-                                                                            <p>
-                                                                                {candidate.phoneNumber}
-                                                                            </p>
-                                                                        </td>
-                                                                        <td align="center" className="col-width">
-                                                                            <IconButton aria-label="edit">
-                                                                                <EditRoundedIcon />
-                                                                            </IconButton>
-                                                                            <IconButton aria-label="delete">
-                                                                                <DeleteIcon />
-                                                                            </IconButton>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </CardContent>
-                                                    </Card>
-                                                ))
-                                            )
-                                        }
-                                    })
-
-                                    : <h2>Loading...</h2>
-                            }
+                            <Card sx={secCard}>
+                                <CardContent>
+                                    {loading ? (
+                                        'Fetching profiles...'
+                                    ) : (
+                                        <div style={{ height: 500, width: '100%' }}>
+                                            <DataGrid
+                                                rows={infos.candidates}
+                                                columns={columns}
+                                                pageSize={5}
+                                                rowsPerPageOptions={[5]}
+                                                checkboxSelection
+                                                onRowSelectionModelChange={handleCheckbox}
+                                            />
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
                         </CardContent>
                     </Card>
                     <Box sx={bottomBox}>
                         <Button variant="contained" endIcon={<ChevronRight />}
-                            size="large" sx={btnStyle} onClick={handleExportButton}>
+                            size="large" sx={btnStyle} 
+                            onClick={handleExportButton}
+                        >
                             Export
                         </Button>
                     </Box>
