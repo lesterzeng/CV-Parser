@@ -54,12 +54,12 @@ const ListParseItems = () =>
         navigate(`/login`);
     }
 
-    const [parseData, setParseData] = useState([]);
+    const [parseData, setParseData] = useState(data);
     const [failedData, setFailedData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    setParseData(data)
+
 
     const dataWithTempKey = parseData.map((candidate, index) =>
     {
@@ -69,31 +69,42 @@ const ListParseItems = () =>
         };
     });
 
-    // useEffect (() => {
-    //     try {
-    //         fetch(process.env.REACT_APP_PARSE_URL, {
-    //             method: 'GET',
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`,
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         })
-    //             .then((res) => res.json())
-    //             .then((data) =>
-    //             {
-    //                 console.log(data);
-    //                 const failedRows = data.filter((row) => !row.email || !row.firstName || !row.lastName);
-    //                 setFailedData(failedRows);
-    //                 const successfulRows = data.filter((row) => row.email && row.firstName && row.lastName);
-    //                 setParseData(successfulRows);
-    //                 setLoading(false);
-    //             });
-    //     } catch (error) {
+    useEffect (() => {
+        // try {
+        //     fetch(process.env.REACT_APP_PARSE_URL, {
+        //         method: 'GET',
+        //         headers: {
+        //             Authorization: `Bearer ${token}`,
+        //             'Content-Type': 'application/json',
+        //         },
+        //     })
+        //         .then((res) => res.json())
+        //         .then((data) =>
+        //         {
+        //             console.log(data);
+        //             const failedRows = data.filter((row) => !row.email || !row.firstName || !row.lastName);
+        //             setFailedData(failedRows);
+        //             const successfulRows = data.filter((row) => row.email && row.firstName && row.lastName);
+        //             setParseData(successfulRows);
+        //             setLoading(false);
+        //         });
+        // } catch (error) {
             
-    //     }
-    // },[])
+        // }
 
+        try {
+            console.log(dataWithTempKey)
+            const failedRows = dataWithTempKey.filter((row) => !row.email || !row.firstName || !row.lastName);
+                    setFailedData(failedRows);
+                    const successfulRows = dataWithTempKey.filter((row) => row.email && row.firstName && row.lastName);
+                    setParseData(successfulRows);
+                    setLoading(false);
+        } catch (error) {
+       
+        }
+    },[])
 
+// console.log(dataWithTempKey)
 
     const [expanded, setExpanded] = useState(false);
 
