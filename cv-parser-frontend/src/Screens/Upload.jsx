@@ -291,6 +291,13 @@ function FileUploader() {
       setSelectedFiles([]);
    };
 
+   const handleParse = () =>{
+      fetch("http://localhost:8080/api/parse/uploaded", {
+         method: "POST",
+         // headers: headers,
+      })
+   }
+
    return (
       <form onSubmit={handleSubmit}>
          {uploadMode && (
@@ -464,7 +471,7 @@ function FileUploader() {
                   Add More Files
                </button>
                <button type="button">Quick Create</button>
-               <button type="button">Parse & Edit</button>
+               <button type="button" onClick={handleParse}>Parse & Edit</button>
             </div>
          )}
       </form>
