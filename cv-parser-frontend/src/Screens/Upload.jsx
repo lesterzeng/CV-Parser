@@ -1,5 +1,15 @@
 import React, { useState, useRef } from "react";
 import "./Upload.css";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import {
+   Accordion,
+   AccordionDetails,
+   AccordionSummary,
+   Box,
+   Typography,
+} from "@mui/material";
 
 function FileUploader() {
    const dummyError = {
@@ -18,10 +28,16 @@ function FileUploader() {
    const [success, setSuccess] = useState(false);
    const [error, setError] = useState(false);
    const [sizeError, setSizeError] = useState(false);
+   const [showErrors, setShowErrors] = useState(false);
    const [errorList, setErrorList] = useState(dummyError);
    const [sizeErrorList, setSizeErrorList] = useState(dummyError);
+   const [expanded, setExpanded] = useState(false);
 
    const fileInputRef = useRef(null);
+
+   const handleAccordionChange = () => {
+      setExpanded(!expanded);
+   };
 
    const handleFileSelect = (event) => {
       setSelectedFiles([...selectedFiles, ...event.target.files]);
@@ -39,6 +55,10 @@ function FileUploader() {
       const files = event.dataTransfer.files;
       setSelectedFiles([...selectedFiles, ...files]);
       setSuccess(false);
+   };
+
+   const toggleErrors = () => {
+      setShowErrors(!showErrors);
    };
 
    const handleSubmit = async (event) => {
@@ -212,6 +232,41 @@ function FileUploader() {
       // }
    };
 
+   const handleCancel = () => {
+      // const headers = {
+      //    Authorization: `Bearer ${Cookies.get("jwt")}`,
+      //    "Content-Type": "application/json",
+      // };
+      if (
+         window.confirm(`Are you sure you want to cancel all current uploads?`)
+      ) {
+         fetch("http://localhost:8080/api/upload/cancel", {
+            method: "GET",
+            // headers: headers,
+         })
+            .then((response) => {
+               if (response.ok) {
+                  setErrorList(dummyError);
+                  alert("Upload Cancelled");
+               } else if (response.status === 400) {
+                  // Handle bad request
+                  response.json().then((data) => {
+                     console.log(data); // Log the error message returned from the server
+                  });
+               } else {
+                  // Handle other errors
+               }
+               setSelectedFiles([]);
+            })
+            .catch((error) => {
+               alert("Cancel failed");
+            });
+         // .finally(() => {
+         //    setLoading(false);
+         // });
+      }
+   };
+
    const handleClear = () => {
       if (selectedFiles.length === 0) {
          return;
@@ -235,6 +290,7 @@ function FileUploader() {
       setLoading(false);
       setSelectedFiles([]);
    };
+
    return (
       <form onSubmit={handleSubmit}>
          {uploadMode && (
@@ -257,7 +313,7 @@ function FileUploader() {
                   {loading ? (
                      <div className="spinner" />
                   ) : (
-                     <p>Drag and drop files here, or click to select files</p>
+                     <p>Drag and Drop Files, or Click Here to Select Files</p>
                   )}
 
                   {selectedFiles.length > 0 && (
@@ -268,27 +324,131 @@ function FileUploader() {
                   {loading ? "Uploading..." : "Upload"}
                </button>
                <button type="button" onClick={handleClear}>
-                  Clear
+                  Clear Selected Files
+               </button>
+               <button type="button" onClick={handleCancel}>
+                  Cancel Upload
                </button>
             </div>
          )}
-         {success && <p>Upload successful!</p>}
+         {success && (
+            <p>
+               {" "}
+               <span style={{ color: "green" }}>Upload successful!</span>
+            </p>
+         )}
          {error && (
-            <div>
-               <p>Total Upload Successful: {errorList.successCount}</p>
-               <p>Upload Failed (in current batch): {errorList.failCount}</p>
-               {errorList.errors.map((error) => (
-                  <p>
-                     {error.fileName} {error.errorMessage}
-                  </p>
-               ))}
-            </div>
+            // <div>
+            //    {/* <p>Total Upload Successful: {errorList.successCount}</p> */}
+            //    <span style={{ color: "green" }}>
+            //       <ArrowRightIcon /> Successful Uploads:{" "}
+            //       {errorList.successCount}
+            //    </span>
+            //    <div>
+            //       <span style={{ color: "red" }} onClick={toggleErrors}>
+            //          {showErrors ? (
+            //             <span>
+            //                <ArrowDropDownIcon />
+            //             </span>
+            //          ) : (
+            //             <span>
+            //                <ArrowRightIcon />
+            //             </span>
+            //          )}{" "}
+            //          Failed Uploads: {errorList.failCount}
+            //          {/* /{totalCount} */}
+            //       </span>
+            //       {showErrors && (
+            //          <ul>
+            //             {errorList.errors.map((error, i) => (
+            //                <li key={i}>
+            //                   {error.fileName}{" "}
+            //                   <span style={{ color: "red" }}>
+            //                      {error.errorMessage}
+            //                   </span>
+            //                </li>
+            //             ))}
+            //          </ul>
+            //       )}
+            //    </div>
+            //    {/* <p>Upload Failed (in current batch): {errorList.failCount}</p>
+            //    {errorList.errors.map((error) => (
+            //       <p>
+            //          {error.fileName} {error.errorMessage}
+            //       </p>
+            //    ))} */}
+            // </div>
+            <Box sx={{ width: "100%" }}>
+               <Accordion>
+                  <AccordionSummary>
+                     <Typography variant="h6">
+                        <span style={{ color: "green" }}>
+                           {`Success count: ${errorList.successCount}`}
+                        </span>
+                     </Typography>
+                  </AccordionSummary>
+               </Accordion>
+               <Accordion expanded={expanded} onChange={handleAccordionChange}>
+                  <AccordionSummary
+                     expandIcon={<ExpandMoreIcon />}
+                     aria-controls="error-list-content"
+                     id="error-list-header"
+                  >
+                     <Typography variant="h6" component="div">
+                        <span
+                           style={{ color: "red" }}
+                        >{`Failed count: ${errorList.failCount}`}</span>
+                     </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                     <Box sx={{ width: "100%" }}>
+                        <Box
+                           sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                           }}
+                        >
+                           {/* <Typography variant="body1">
+          {`Failed count: ${errorList.failCount}`}
+        </Typography> */}
+                        </Box>
+                        <Box
+                           sx={{
+                              marginTop: "8px",
+                              overflow: "auto",
+                              height: "190px",
+                           }}
+                        >
+                           {errorList.errors.map((error, index) => (
+                              <Box
+                                 key={index}
+                                 sx={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                 }}
+                              >
+                                 <Typography variant="body1">
+                                    <span style={{ color: "red" }}>
+                                       {error.fileName}
+                                    </span>
+                                    {`: ${error.errorMessage}`}
+                                 </Typography>
+                              </Box>
+                           ))}
+                        </Box>
+                     </Box>
+                  </AccordionDetails>
+               </Accordion>
+            </Box>
          )}
          {sizeError && (
             <div>
                {sizeErrorList.errors.map((error) => (
                   <p>
-                     {error.fileName} {error.errorMessage}
+                     {error.fileName}{" "}
+                     <span style={{ color: "red" }}>{error.errorMessage}</span>
                   </p>
                ))}
             </div>
@@ -304,7 +464,7 @@ function FileUploader() {
                   Add More Files
                </button>
                <button type="button">Quick Create</button>
-               <button type="button">Parse</button>
+               <button type="button">Parse & Edit</button>
             </div>
          )}
       </form>
