@@ -41,10 +41,9 @@ const handleSubmit = () => {
 const handleLogout = () => {
     sessionStorage.removeItem('token')
     console.log("Logged out")
+
 }
-
-
-    return (
+return (
         <div>
             <br></br>
             <br></br>
