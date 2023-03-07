@@ -177,13 +177,13 @@ function FileUploader() {
          return;
       }
 
-      // const headers = {
-      //    Authorization: `Bearer ${Cookies.get("jwt")}`,
-      //    "Content-Type": "application/json",
-      // };
+      const headers = {
+         Authorization: `Bearer ${sessionStorage.getItem('token') }`,
+         "Content-Type": "application/json",
+      };
       fetch("http://localhost:8080/api/upload/up", {
          method: "POST",
-         // headers: headers,
+         headers: headers,
          body: formData,
       })
          .then((response) => {
@@ -233,16 +233,16 @@ function FileUploader() {
    };
 
    const handleCancel = () => {
-      // const headers = {
-      //    Authorization: `Bearer ${Cookies.get("jwt")}`,
-      //    "Content-Type": "application/json",
-      // };
+      const headers = {
+         Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+         "Content-Type": "application/json",
+      };
       if (
          window.confirm(`Are you sure you want to cancel all current uploads?`)
       ) {
          fetch("http://localhost:8080/api/upload/cancel", {
             method: "GET",
-            // headers: headers,
+            headers: headers,
          })
             .then((response) => {
                if (response.ok) {

@@ -14,7 +14,6 @@ function Router() {
     <Routes>
     <Route path="/login" element={<Login />}></Route> 
     <Route path="/dashboard" element={<Dashboard />}></Route> 
-    {/* <Route path="/upload" element={<Upload />}></Route>  */}
     <Route path="/cvparse/cand" element={<ListParseItems />}></Route> 
     <Route path="/cvparse/cand/profile" element={<ListProfileCreated />}></Route> 
     <Route path="/upload" element={<FileUploader />}></Route> 

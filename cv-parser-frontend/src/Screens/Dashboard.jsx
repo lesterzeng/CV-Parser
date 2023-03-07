@@ -105,6 +105,11 @@ const Dashboard = () =>
             row.lastName.toLowerCase().includes(searchInput.toLowerCase())
     );
 
+    const handleButton = () =>
+    {
+        navigate(`/upload`)
+    }
+
     const columns = [
 
 
@@ -175,7 +180,7 @@ const Dashboard = () =>
             <NavBar/>
             <h1>Dashboard</h1>
             <div className="button-container">
-                <UploadButton />
+                <UploadButton handleButton={handleButton}/>
                 <SearchBox handleSearch={handleSearch} />
             </div>
 
