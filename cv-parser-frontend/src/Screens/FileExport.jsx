@@ -118,10 +118,15 @@ const FileExport = () => {
 
     const handleExportButton = () => {
         console.log("export")
-
-        const selectExports = infos.candidates.filter((info) => selectedCheckboxes.includes(info.id))
-
-        console.log("selected exports: ", selectExports)
+        if(selectedCheckboxes > 0){
+            const selectExports = infos.candidates.filter(
+                (info) => selectedCheckboxes.includes(info.id)
+            )
+            console.log("selected exports: ", selectExports)
+        }
+        else{
+            alert("No profiles selected for export.")
+        }
     }
 
     console.log(infos)
