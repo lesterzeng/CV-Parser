@@ -35,16 +35,7 @@ const ListParseItems = () =>
         }
     }
 
-    const handleCreation = (selectedIds) =>
-    {
-        console.log(selectedIds)
-    }
 
-
-    const handleCancel = () =>
-    {
-        navigate(-1)
-    }
 
     let navigate = useNavigate()
 
@@ -124,6 +115,19 @@ const ListParseItems = () =>
         }
     }
 
+    const handleCreation = (selectedRows) =>
+    {
+        console.log(selectedRows)
+        const selectedTempKeys = selectedRows.map((row) => row.tempKey);
+        console.log(selectedTempKeys)
+        
+    }
+
+
+    const handleCancel = () =>
+    {
+        navigate(-1)
+    }
 
     const columns = [
 
@@ -192,10 +196,14 @@ const ListParseItems = () =>
         },
     ];
 
-    const [selectedRows, setSelectedRows] = useState([]);
-    const handleSelectionModelChange = (newSelection) =>
-    {
-        setSelectedRows(newSelection.selectionModel.map((tempKey) => tempKey.toString()));
+    const [selectedRows, setSelectedRows] = useState();
+
+    const handleSelection = (ids) =>
+    {     
+        const selectedIDs = new Set(ids);
+        const selectedRowData = parseData.filter((row) =>
+            selectedIDs.has(row.tempKey));
+        setSelectedRows(selectedRowData);
         console.log(selectedRows)
     };
 
@@ -221,8 +229,7 @@ const ListParseItems = () =>
                                     pageSize={5}
                                     rowsPerPageOptions={[5]}
                                     checkboxSelection
-                                        onSelectionModelChange={handleSelectionModelChange}
-                                   
+                                        onRowSelectionModelChange={handleSelection}
                                 />
                             </div>
                         )}
@@ -269,7 +276,7 @@ const ListParseItems = () =>
             </Box>
             <Box sx={bottomBox}>
                 <Button variant="contained" endIcon={<ChevronRight />}
-                    size="large" sx={btnStyle} onClick={() => handleCreation(selectedIds)}>
+                    size="large" sx={btnStyle} onClick={() => handleCreation(selectedRows)}>
                     Create Profiles
                 </Button>
             </Box>
