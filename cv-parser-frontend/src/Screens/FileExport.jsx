@@ -10,12 +10,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HomeIcon from '@mui/icons-material/Home';
-import SearchIcon from '@mui/icons-material/Search'
-import ChevronRight from '@mui/icons-material/ChevronRight'
-import "../css/FileExport.css"
+import SearchIcon from '@mui/icons-material/Search';
+import ChevronRight from '@mui/icons-material/ChevronRight';
+import "../css/FileExport.css";
 // psPDF library
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 import NavBar from '../Component/Navbar';
 
