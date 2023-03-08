@@ -27,7 +27,11 @@ export default function CandidateList() {
     candidatesWithTempKey[index] = updatedCandidate;
     setCandidates(candidatesWithTempKey);
   }
-
+    // const handleEdit = (id) =>
+    // {
+    //     navigate(`/edit/${id}`);
+    // };
+    
   return (
     <div>
       <h1>Candidate List</h1>

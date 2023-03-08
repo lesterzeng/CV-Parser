@@ -27,7 +27,6 @@ export default function EditForm({ data, onSave, onCancel }) {
   return (
     <form onSubmit={handleSubmit} >
       <Box 
-        component="form"
         sx={{
           "& .MuiTextField-root": { m: 1, width: "25ch" },
         }}
@@ -331,10 +330,10 @@ export default function EditForm({ data, onSave, onCancel }) {
             InputLabelProps={{
               shrink: true,
             }}
-            defaultValue={formData.jobsListId}
+            defaultValue={formData.jobList}
             variant="filled"
             type="text"
-            name="jobsListId"
+            name="jobList"
             onChange={handleChange}
           />
         </div>
