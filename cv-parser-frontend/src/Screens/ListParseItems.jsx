@@ -41,17 +41,15 @@ const ListParseItems = () =>
 
     const token = sessionStorage.getItem('token');
 
-    if (!token)
-    {
 
-        navigate(`/login`);
-    }
 
     const [parseData, setParseData] = useState(data);
     const [failedData, setFailedData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedIds, setSelectedIds] = useState([]);
+    const [selectedRows, setSelectedRows] = useState({});
+
 
 
 
@@ -65,6 +63,11 @@ const ListParseItems = () =>
 
     useEffect(() =>
     {
+        if (!token)
+        {
+
+            navigate(`/login`);
+        }
         try
         {
             const failedRows = dataWithTempKey.filter((row) => !row.email || !row.firstName || !row.lastName || (row.email === "No Email") || (row.firstName === "No Name") || (row.lastName === "No Name"));
@@ -118,9 +121,41 @@ const ListParseItems = () =>
     const handleCreation = (selectedRows) =>
     {
         console.log(selectedRows)
-        const selectedTempKeys = selectedRows.map((row) => row.tempKey);
-        console.log(selectedTempKeys)
+        // const selectedTempKeys = selectedRows.map((row) => row.tempKey);
+        // console.log(selectedTempKeys)
+        const selectedRowsWithoutTempKeys = selectedRows.map(({ tempKey, ...rest }) => rest);
+        console.log(selectedRowsWithoutTempKeys)
         
+        const headers = {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            'Content-Type': 'application/json',
+        };
+
+        fetch("http://localhost:8080/cvparser/cand", {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(selectedRowsWithoutTempKeys),
+        }).then((response) =>
+        {
+            if (response.ok)
+            {
+                console.log(response)
+                response.json().then((data) =>
+                {
+                    console.log(data)
+                    //navigate to profiles created screen
+                })
+            } else
+            {
+                // Handle other errors
+            }
+        })
+            .catch((error) =>
+            {
+                alert("Profile creation failed");
+            });
+
+
     }
 
 
@@ -196,7 +231,6 @@ const ListParseItems = () =>
         },
     ];
 
-    const [selectedRows, setSelectedRows] = useState();
 
     const handleSelection = (ids) =>
     {     
@@ -204,7 +238,6 @@ const ListParseItems = () =>
         const selectedRowData = parseData.filter((row) =>
             selectedIDs.has(row.tempKey));
         setSelectedRows(selectedRowData);
-        console.log(selectedRows)
     };
 
     return (

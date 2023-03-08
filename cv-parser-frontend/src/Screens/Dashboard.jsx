@@ -15,11 +15,7 @@ const Dashboard = () =>
     let navigate = useNavigate()
 
     const token = sessionStorage.getItem('token');
-    if (!token)
-    {
 
-        navigate(`/login`);
-    }
 
     
 
@@ -29,8 +25,14 @@ const Dashboard = () =>
     const [error, setError] = useState(null);
     const [searchInput, setSearchInput] = useState('');
 
+    
     useEffect(() =>
     {
+        if (!token)
+        {
+            navigate(`/login`);
+        }
+        
         try
         {
             fetch(process.env.REACT_APP_PARSE_URL, {
