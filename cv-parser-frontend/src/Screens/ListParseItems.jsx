@@ -8,6 +8,7 @@ import JobInfo from '../Component/JobInfo';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import ChevronRight from '@mui/icons-material/ChevronRight'
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const ListParseItems = () =>
 {
@@ -49,6 +50,7 @@ const ListParseItems = () =>
     const [error, setError] = useState(null);
     const [selectedIds, setSelectedIds] = useState([]);
     const [selectedRows, setSelectedRows] = useState({});
+    const [loadingProfileCreate, setLoadingProfileCreate] = useState(false)
 
 
 
@@ -120,6 +122,10 @@ const ListParseItems = () =>
 
     const handleCreation = (selectedRows) =>
     {
+        if (Object.keys(selectedRows).length == 0 ){
+            alert("Please select profiles to be created")
+        } else {
+        setLoadingProfileCreate(true)
         console.log(selectedRows)
         // const selectedTempKeys = selectedRows.map((row) => row.tempKey);
         // console.log(selectedTempKeys)
@@ -144,6 +150,7 @@ const ListParseItems = () =>
                 {
                     console.log(data)
                     //navigate to profiles created screen
+                    navigate("/export", { state: { data } })
                 })
             } else
             {
@@ -155,7 +162,7 @@ const ListParseItems = () =>
                 alert("Profile creation failed");
             });
 
-
+        }
     }
 
 
@@ -308,10 +315,17 @@ const ListParseItems = () =>
                 </Button>
             </Box>
             <Box sx={bottomBox}>
-                <Button variant="contained" endIcon={<ChevronRight />}
-                    size="large" sx={btnStyle} onClick={() => handleCreation(selectedRows)}>
-                    Create Profiles
-                </Button>
+            
+                <LoadingButton
+                    variant="contained" endIcon={<ChevronRight />}
+                    size="large"
+                    sx={btnStyle}
+                    onClick={() => handleCreation(selectedRows)}
+                    loading={loadingProfileCreate}
+
+                >
+                    <span> Create Profiles</span>
+                </LoadingButton>
             </Box>
         </div>
     );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Card, CardActions, CardContent, Typography, Button, Checkbox, IconButton, FormControl, FormControlLabel }
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Box, Card, CardActions, CardContent, Button, Checkbox, IconButton, FormControl, FormControlLabel }
     from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
@@ -16,15 +16,17 @@ import "../css/FileExport.css";
 // psPDF library
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
 import NavBar from '../Component/Navbar';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // importing placeholder data for test
 // import pData from '../placeholder.json';
 
 const label = { inputProps: { 'aria-label': 'person name' } };
 
-const mainBox = () => {
+const mainBox = () =>
+{
     return {
         height: "90vh",
         display: "flex",
@@ -33,7 +35,8 @@ const mainBox = () => {
     }
 }
 
-const topBox = () => {
+const topBox = () =>
+{
     return {
         margin: "0 0 10px 0",
         display: "flex",
@@ -41,7 +44,8 @@ const topBox = () => {
     }
 }
 
-const bottomBox = () => {
+const bottomBox = () =>
+{
     return {
         margin: " 10px 0 0 0",
         display: "flex",
@@ -49,7 +53,8 @@ const bottomBox = () => {
     }
 }
 
-const mainCard = () => {
+const mainCard = () =>
+{
     return {
         width: "90vw",
         height: "70vh",
@@ -57,7 +62,8 @@ const mainCard = () => {
     }
 }
 
-const secCard = () => {
+const secCard = () =>
+{
     return {
         minWidth: "90%",
         height: "5%",
@@ -66,7 +72,8 @@ const secCard = () => {
     }
 }
 
-const checkboxStyle = () => {
+const checkboxStyle = () =>
+{
     return {
         color: "#461d5c",
         '&.Mui-checked': {
@@ -75,7 +82,8 @@ const checkboxStyle = () => {
     }
 }
 
-const btnStyle = () => {
+const btnStyle = () =>
+{
     return {
         margin: "0 10px 0 10px",
         height: "100%",
@@ -86,13 +94,19 @@ const btnStyle = () => {
     }
 }
 
-const cardHeader = () => {
+const cardHeader = () =>
+{
     return {
         marginLeft: "20px"
     }
 }
 
-const FileExport = () => {
+const FileExport = () =>
+{
+
+    const location = useLocation();
+    const data = location.state.data;
+
     // from react-dom to reroute
     let navigate = useNavigate()
     const token = sessionStorage.getItem('token');
@@ -101,57 +115,88 @@ const FileExport = () => {
     const [loading, setLoading] = useState(true);
     // create state to import JSON placeholder
     const [infos, setInfos] = useState([]);
+    // create state to store data from parse
+    const [successfulData, setSuccessfulData] = useState(data.successList)
+    const [duplicateData, setDuplicateData] = useState(data.duplicateList)
 
-    useEffect(() => {
+    const duplicateDataWithTempKey = duplicateData.map((candidate, index) =>
+    {
+        return {
+            ...candidate,
+            tempKey: parseInt(index, 10), // generate temporary key using the index
+        };
+    });
+
+    const successDataWithTempKey = successfulData.map((candidate, index) =>
+    {
+        return {
+            ...candidate,
+            tempKey: parseInt(index, 10), // generate temporary key using the index
+        };
+    });
+
+
+
+    useEffect(() =>
+    {
         // simple token check
-        if (!token) {
+        if (!token)
+        {
             navigate(`/login`);
         }
-        else {
+        else
+        {
             retrieveData()
         }
     }, [])
 
-    const retrieveData = async () => {
-        try {
-            await fetch(process.env.REACT_APP_PARSE_URL, {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then(response => {
-                    return response.json()
-                })
-                .then(data => {
-                    // console.log("retriveData: ", data)
-                    // const filterData = data.filter((row) => !row.email && !row.firstName && !row.lastName);
-                    // console.log(filterData)
-                    const successfulRows = data.filter((row) => row.email && row.firstName && row.lastName);
-                    setInfos(successfulRows)
-                    setLoading(false);
-                })
-        } catch (error) {
-            console.log(error)
-        }
+    const retrieveData = async () =>
+    {
+        // try {
+        //     await fetch(process.env.REACT_APP_PARSE_URL, {
+        //         method: 'GET',
+        //         headers: {
+        //             Authorization: `Bearer ${token}`,
+        //             'Content-Type': 'application/json',
+        //         },
+        //     })
+        //         .then(response => {
+        //             return response.json()
+        //         })
+        //         .then(data => {
+        // console.log("retriveData: ", data)
+        // const duplicateRows = duplicateDataWithTempKey.filter((row) => !row.email && !row.firstName && !row.lastName);
+        // console.log(filterData)
+        // const successRows = successDataWithTempKey.filter((row) => row.email && row.firstName && row.lastName);
+ 
+        // setInfos(duplicateRows)
+        setLoading(false);
+        //         })
+        // } catch (error) {
+        //     console.log(error)
+        // }
     }
 
-    const handleExportButton = () => {
+    const handleExportButton = () =>
+    {
         console.log("export")
-        if (selectedExportData.length > 0) {
+        if (selectedExportData.length > 0)
+        {
             exportingProcess()
             // console.log("selected exports: ", selectedExportData)
         }
-        else {
+        else
+        {
             alert("No profiles selected for export.")
         }
     }
 
-    const exportingProcess = () => {
+    const exportingProcess = () =>
+    {
         const doc = new jsPDF()
 
-        const tableData = selectedExportData.map((data) => {
+        const tableData = selectedExportData.map((data) =>
+        {
             const fullName = data.firstName + " " + data.midName + " " + data.lastName
             return [fullName, data.email, data.phoneNumber, data.workExp, data.recentCompanies]
         })
@@ -167,7 +212,8 @@ const FileExport = () => {
         doc.save(`Candidates_${uniqueName}.pdf`)
     }
 
-    const uniqueGenerator = () => {
+    const uniqueGenerator = () =>
+    {
         const date = new Date()
 
         let day = ("0" + date.getDate()).slice(-2)
@@ -278,11 +324,12 @@ const FileExport = () => {
 
     const [selectedExportData, setSelectedExportData] = useState()
 
-    const handleCheckbox = (ids) => {
+    const handleCheckbox = (ids) =>
+    {
         console.log("handling liao: ", ids)
         const selectedIDs = new Set(ids);
-        const selectedRowData = infos.filter((row) =>
-            selectedIDs.has(row.id));
+        const selectedRowData = successDataWithTempKey.filter((row) =>
+            selectedIDs.has(row.tempKey));
         console.log("selectedRows: ", selectedRowData);
         setSelectedExportData(selectedRowData)
     }
@@ -290,7 +337,8 @@ const FileExport = () => {
     // for search input
     const [searchInput, setSearchInput] = useState('');
 
-    const handleSearch = (event) => {
+    const handleSearch = (event) =>
+    {
         setSearchInput(event.target.value);
     };
 
@@ -302,9 +350,17 @@ const FileExport = () => {
             row.lastName.toLowerCase().includes(searchInput.toLowerCase())
     );
 
-    const handleDashboardRoute = () => {
+    const handleDashboardRoute = () =>
+    {
         navigate(`/dashboard`)
     }
+
+    const [expanded, setExpanded] = useState(false);
+
+    const handleChange = (panel) => (event, isExpanded) =>
+    {
+        setExpanded(isExpanded ? panel : false);
+    };
 
     return (
         <div>
@@ -338,30 +394,67 @@ const FileExport = () => {
                         </div>
                     </Box>
                     <Card sx={mainCard}>
-                        <CardContent>
-                            <Box sx={cardHeader}>
-                                <h1>1 / 4 Profiles Created</h1>
-                            </Box>
-
-                            {/* secondary/inner card */}
-                            <Card sx={secCard}>
-                                <CardContent>
+                        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                            <AccordionSummary style={{ backgroundColor: 'lightblue' }} aria-controls="panel1-content" id="panel1-header" expandIcon={<ExpandMoreIcon />}>
+                                <Typography component="span">{loading ? "Loading information..." : ` Successful Created Profiles`}</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Typography component="span">
                                     {loading ? (
                                         'Fetching profiles...'
                                     ) : (
-                                        <div style={{ height: 500, width: '100%' }}>
-                                            <DataGrid
-                                                rows={filteredData}
-                                                columns={columns}
-                                                pageSize={5}
-                                                rowsPerPageOptions={[5]}
-                                                checkboxSelection
-                                                onRowSelectionModelChange={handleCheckbox}
-                                            />
-                                        </div>
+                                            <div style={{ height: 500, width: '100%' }}>
+                                                <DataGrid
+                                                    getRowId={(row) => row.tempKey}
+                                                    rows={successDataWithTempKey}
+                                                    columns={columns}
+                                                    pageSize={5}
+                                                    rowsPerPageOptions={[5]}
+                                                    checkboxSelection
+                                                    onRowSelectionModelChange={handleCheckbox}
+                                                />
+                                            </div>
                                     )}
-                                </CardContent>
-                            </Card>
+                                </Typography>
+                            </AccordionDetails>
+                        </Accordion>
+                        <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                            <AccordionSummary style={{ backgroundColor: 'lightblue' }} aria-controls="panel2-content" id="panel2-header" expandIcon={<ExpandMoreIcon />}>
+                                <Typography component="span">{loading ? "Loading information..." : ` Duplicated Profiles`}</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Typography component="span">
+                                    {loading ? (
+                                        'Fetching profiles...'
+                                    ) : (
+                                            <Card sx={secCard}>
+                                                <CardContent>
+                                                    {loading ? (
+                                                        'Fetching profiles...'
+                                                    ) : (
+                                                        <div style={{ height: 500, width: '100%' }}>
+                                                            <DataGrid
+                                                                getRowId={(row) => row.tempKey}
+                                                                rows={duplicateDataWithTempKey}
+                                                                columns={columns}
+                                                                pageSize={5}
+                                                                rowsPerPageOptions={[5]}
+                                                                checkboxSelection
+                                                                onRowSelectionModelChange={handleCheckbox}
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </CardContent>
+                                            </Card>
+                                    )}
+                                </Typography>
+                            </AccordionDetails>
+                        </Accordion>
+                        <CardContent>
+        
+
+                            {/* secondary/inner card */}
+
                         </CardContent>
                     </Card>
                     <Box sx={bottomBox}>
