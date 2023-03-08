@@ -68,10 +68,10 @@ const secCard = () => {
 
 const checkboxStyle = () => {
     return {
-        color: "#461d5c",
-        '&.Mui-checked': {
-            color: "#6a2b8c",
-        },
+        // color: "#461d5c",
+        '& .MuiDataGrid-checkboxInput':{
+            color:"#6a2b8c"
+        }
     }
 }
 
@@ -357,6 +357,7 @@ const FileExport = () => {
                                                 rowsPerPageOptions={[5]}
                                                 checkboxSelection
                                                 onRowSelectionModelChange={handleCheckbox}
+                                                sx={checkboxStyle}
                                             />
                                         </div>
                                     )}
