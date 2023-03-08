@@ -8,9 +8,12 @@ import Dashboard from './Screens/Dashboard'
 import NavBar from './Component/Navbar';
 import ListProfileCreated from './Screens/ListProfileCreated';
 import FileExport from './Screens/FileExport';
+import JobInfo from './Component/JobInfo';
+import EnterJobInfo from './Screens/EnterJobInfo';
 
 
-function Router() {
+function Router()
+{
   return (
     <Routes>
       <Route path="/login" element={<Login />}></Route>
@@ -20,7 +23,7 @@ function Router() {
       <Route path="/upload" element={<FileUploader />}></Route>
       <Route path="/create" element={<Create />}></Route>
       <Route path="/export" element={<FileExport />}></Route>
-      <Route path="/export" element={<FileExport />}></Route>
+      <Route path="/enterjob" element={<EnterJobInfo />}></Route>
     </Routes>
   );
 }
