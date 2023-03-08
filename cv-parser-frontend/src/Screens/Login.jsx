@@ -1,5 +1,67 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { Box, Card, Button } from '@mui/material';
+import { FormControl, InputLabel, OutlinedInput, InputAdornment } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import LockIcon from '@mui/icons-material/Lock';
+import NavBar from '../Component/Navbar';
+
+// styling for box
+const mainBox = () => {
+    return {
+        height: "90vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    }
+}
+
+// styling for button
+const btnStyle = () => {
+    return {
+        margin: "20px 0 0 0",
+        bgcolor: "#461d5c",
+        '&:hover': {
+            bgcolor: "#6a2b8c",
+        }
+    }
+}
+
+// styling for inputs
+const inputStyle = () => {
+    return {
+        margin: "10px",
+        '& label.Mui-focused': {
+            color: 'white',
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: 'green',
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'black',
+            },
+            '&:hover fieldset': {
+                borderColor: 'yellow',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: 'white',
+            }
+        }
+    }
+}
+
+// styling for card
+const loginCard = () => {
+    return {
+        padding: "0 20px 30px 20px",
+        bgcolor: "#8d69c7",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
+    }
+}
 
 const Login = () => {
 
@@ -47,33 +109,50 @@ const Login = () => {
     }
     return (
         <div>
-            <br></br>
-            <br></br>
-            <h4>CV Parser</h4>
-            <br></br>
-            <h1>Welcome Administrator</h1>
-            <br></br>
-            <h5>Sign into your account</h5>
-            <br></br>
-            <form>
-                {/* <!-- Email input --> */}
-                <div className="form-outline mb-4">
-                    <label className="form-label" >UserID</label>
-                    <input type="email" className="form-control" onChange={e => setUserInput({ ...userInput, username: e.target.value })} />
-
-                </div>
-
-                {/* <!-- Password input --> */}
-                <div className="form-outline mb-4">
-                    <label className="form-label" >Password</label>
-                    <input type="password" className="form-control" onChange={e => setUserInput({ ...userInput, password: e.target.value })} />
-
-                </div>
-
-                {/* <!-- Submit button --> */}
-                <button type="button" className="btn btn-primary btn-block mb-4" onClick={handleSubmit}>Sign in</button>
-                <button type="button" className="btn btn-primary btn-block mb-4" onClick={handleLogout}>Test Log Out</button>
-            </form>
+            <NavBar />
+            <Box sx={mainBox}>
+                <Card sx={loginCard}>
+                    <h1>Login Page</h1>
+                    <FormControl sx={inputStyle}>
+                        <InputLabel htmlFor="user-id">
+                            User ID
+                        </InputLabel>
+                        <OutlinedInput
+                            id="user-id"
+                            type="text"
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    <PersonIcon />
+                                </InputAdornment>
+                            }
+                            label="User ID"
+                            onChange={e => setUserInput({ ...userInput, username: e.target.value })}
+                        />
+                    </FormControl>
+                    <FormControl sx={inputStyle}>
+                        <InputLabel htmlFor="password">
+                            Password
+                        </InputLabel>
+                        <OutlinedInput
+                            id="password"
+                            type="password"
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    <LockIcon />
+                                </InputAdornment>
+                            }
+                            label="Password"
+                            onChange={e => setUserInput({ ...userInput, password: e.target.value })}
+                        />
+                    </FormControl>
+                    <Button variant="contained"
+                        size="large" sx={btnStyle}
+                        onClick={handleSubmit}
+                    >
+                        Sign In
+                    </Button>
+                </Card>
+            </Box>
         </div>
     );
 };

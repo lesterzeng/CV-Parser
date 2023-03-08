@@ -10,12 +10,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HomeIcon from '@mui/icons-material/Home';
-import SearchIcon from '@mui/icons-material/Search'
-import ChevronRight from '@mui/icons-material/ChevronRight'
-import "../css/FileExport.css"
+import SearchIcon from '@mui/icons-material/Search';
+import ChevronRight from '@mui/icons-material/ChevronRight';
+import "../css/FileExport.css";
 // psPDF library
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 import NavBar from '../Component/Navbar';
 
@@ -95,21 +95,21 @@ const cardHeader = () => {
 const FileExport = () => {
     // from react-dom to reroute
     let navigate = useNavigate()
-    // simple toek check
     const token = sessionStorage.getItem('token');
-    if (!token) {
-
-        navigate(`/login`);
-    }
 
     // loading state
     const [loading, setLoading] = useState(true);
     // create state to import JSON placeholder
     const [infos, setInfos] = useState([]);
 
-    // read and update state
     useEffect(() => {
-        retrieveData()
+        // simple token check
+        if (!token) {
+            navigate(`/login`);
+        }
+        else {
+            retrieveData()
+        }
     }, [])
 
     const retrieveData = async () => {
@@ -151,9 +151,9 @@ const FileExport = () => {
     const exportingProcess = () => {
         const doc = new jsPDF()
 
-        const tableData = selectedExportData.map((data)=>{
-            const fullName = data.firstName + " " + data.midName + " " +data.lastName
-            return [fullName, data.email, data.phoneNumber , data.workExp, data.recentCompanies]
+        const tableData = selectedExportData.map((data) => {
+            const fullName = data.firstName + " " + data.midName + " " + data.lastName
+            return [fullName, data.email, data.phoneNumber, data.workExp, data.recentCompanies]
         })
 
         console.log("print :", tableData)
@@ -257,7 +257,7 @@ const FileExport = () => {
                 <IconButton aria-label="edit"
                 // onClick={() => handleEdit(params.row.id)}
                 >
-                    <EditRoundedIcon/>
+                    <EditRoundedIcon />
                 </IconButton>
             ),
         },
@@ -270,7 +270,7 @@ const FileExport = () => {
                 <IconButton aria-label="delete"
                 // onClick={() => handleDelete(params.row.id, params.row.firstName)}
                 >
-                    <DeleteIcon/>
+                    <DeleteIcon />
                 </IconButton>
             ),
         },
@@ -290,8 +290,7 @@ const FileExport = () => {
     // for search input
     const [searchInput, setSearchInput] = useState('');
 
-    const handleSearch = (event) =>
-    {
+    const handleSearch = (event) => {
         setSearchInput(event.target.value);
     };
 
@@ -309,7 +308,7 @@ const FileExport = () => {
 
     return (
         <div>
-            <NavBar/>
+            <NavBar />
             <Box sx={mainBox}>
                 <div>
                     <Box sx={topBox}>
