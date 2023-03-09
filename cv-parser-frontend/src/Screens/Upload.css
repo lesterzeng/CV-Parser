@@ -4,13 +4,14 @@
    align-items: center;
    justify-content: center;
    height: 600px;
-   width: 800px;
+   /* width: 800px; */
+   width: 50%;
    border: 4px dashed #ccc;
    border-radius: 10px;
-   font-size: 18px;
+   font-size: 30px;
    font-weight: bold;
    text-align: center;
-   color: #666;
+   color: #a4a4a4;
    background-color: #fafafa;
    overflow: hidden;
    position: relative;
@@ -31,7 +32,7 @@
    color: #888; */
    /* border-color: ; */
    border: 4px dashed #00ff00;
-   color: #c9c9c9;
+   color: #3c3b3b;
 }
 
 /* .file-input {
@@ -53,3 +54,7 @@
       transform: rotate(360deg);
    }
 }
+
+/* .buttons {
+   margin: 10px;
+} */

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Upload.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -10,11 +10,11 @@ import {
    AccordionSummary,
    Box,
    Typography,
+   Button,
 } from "@mui/material";
 
 function FileUploader() {
-
-   let navigate = useNavigate()
+   let navigate = useNavigate();
 
    const dummyError = {
       errors: [
@@ -326,31 +326,31 @@ function FileUploader() {
       setSelectedFiles([]);
    };
 
-   const handleParse = () =>{
+   const handleParse = () => {
       const headers = {
          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       };
       fetch("http://localhost:8080/api/parse/uploaded", {
          method: "POST",
          headers: headers,
-      }).then((response) => {
-         if (response.ok) {
-            console.log(response)
-            response.json().then((data)=>{
-               console.log(data)
-               navigate("/cvparse/cand", { state: { data } })
-            })
-         } else {
-            // Handle other errors
-         }
       })
-      .catch((error) => {
-         alert("Parse failed");
-      });
-   }
+         .then((response) => {
+            if (response.ok) {
+               console.log(response);
+               response.json().then((data) => {
+                  console.log(data);
+                  navigate("/cvparse/cand", { state: { data } });
+               });
+            } else {
+               // Handle other errors
+            }
+         })
+         .catch((error) => {
+            alert("Parse failed");
+         });
+   };
 
    return (
-      
       // <form encType="multipart/form-data" onSubmit={handleSubmit}>
       <form onSubmit={handleSubmit}>
          {uploadMode && (
@@ -380,15 +380,25 @@ function FileUploader() {
                      <p>Selected {selectedFiles.length} file(s)</p>
                   )}
                </div>
-               <button type="submit" disabled={loading}>
+               <Button variant="contained" type="submit" disabled={loading}>
                   {loading ? "Uploading..." : "Upload"}
-               </button>
-               <button type="button" onClick={handleClear} disabled={loading}>
-                  Clear Selected Files
-               </button>
-               <button type="button" onClick={handleCancel} disabled={loading}>
-                  Cancel Upload
-               </button>
+               </Button>
+               <Button
+                  variant="contained"
+                  type="button"
+                  onClick={handleClear}
+                  disabled={loading}
+               >
+                  Clear Currently Selected
+               </Button>
+               <Button
+                  variant="contained"
+                  type="button"
+                  onClick={handleCancel}
+                  disabled={loading}
+               >
+                  Cancel Current Batch
+               </Button>
             </div>
          )}
          {success && (
@@ -440,7 +450,7 @@ function FileUploader() {
             // </div>
             <Box sx={{ width: "100%" }}>
                <Accordion>
-                  <AccordionSummary>
+                  <AccordionSummary disabled={true}>
                      <Typography variant="h6">
                         <span style={{ color: "green" }}>
                            {`Success count: ${errorList.successCount}`}
@@ -504,7 +514,14 @@ function FileUploader() {
             </Box>
          )}
          {sizeError && (
-            <div>
+            <div
+               style={{
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  width: "50%",
+                  padding: "20px",
+               }}
+            >
                {sizeErrorList.errors.map((error) => (
                   <p>
                      {error.fileName}{" "}
@@ -515,16 +532,19 @@ function FileUploader() {
          )}
          {!uploadMode && (
             <div>
-               <button
+               <Button
+                  variant="contained"
                   type="button"
                   onClick={() => {
                      handleUploadMode();
                   }}
                >
                   Add More Files
-               </button>
-               <button type="button">Quick Create</button>
-               <button type="button" onClick={handleParse}>Parse & Edit</button>
+               </Button>
+               {/* <Button variant="contained"  type="button">Quick Create</Button> */}
+               <Button variant="contained" type="button" onClick={handleParse}>
+                  Parse & Edit
+               </Button>
             </div>
          )}
       </form>
