@@ -1,0 +1,55 @@
+{
+    "jobsListId": 1,
+    "candidates": [
+        {
+            "id": 1,
+            "email":"johndoe@email.com",
+            "firstName": "John",
+            "midName": "Little",
+            "lastName": "Doe",
+            "phoneNumber": "98762345",
+            "workingExperience": 5,
+            "uploadDate": "2023-02-21"
+        },
+        {
+            "id": 2,
+            "email":"janedamsel@email.com",
+            "firstName": "Jane",
+            "midName": "Petite",
+            "lastName": "Damsel",
+            "phoneNumber": "23451289",
+            "workingExperience": 3,
+            "uploadDate": "2023-02-24"
+        },
+        {
+            "id": 3,
+            "email":"terrytempes@email.com",
+            "firstName": "Terry",
+            "midName": "Toa",
+            "lastName": "Tempes",
+            "phoneNumber": "96857463",
+            "workingExperience": 5,
+            "uploadDate": "2023-02-25"
+        },
+        {
+            "id": 4,
+            "email":"minamoe@email.com",
+            "firstName": "Mina",
+            "midName": "Meina",
+            "lastName": "Moe",
+            "phoneNumber": "14253678",
+            "workingExperience": 4,
+            "uploadDate": "2023-02-25"
+        },
+        {
+            "id": 5,
+            "email":"perryparr@email.com",
+            "firstName": "Perry",
+            "midName": "Popo",
+            "lastName": "Parr",
+            "phoneNumber": "85256545",
+            "workingExperience": 5,
+            "uploadDate": "2023-02-26"
+        }
+    ]
+}

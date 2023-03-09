@@ -16,11 +16,7 @@ const Dashboard = () =>
     let navigate = useNavigate()
 
     const token = sessionStorage.getItem('token');
-    if (!token)
-    {
 
-        navigate(`/login`);
-    }
 
     
 
@@ -30,8 +26,14 @@ const Dashboard = () =>
     const [error, setError] = useState(null);
     const [searchInput, setSearchInput] = useState('');
 
+    
     useEffect(() =>
     {
+        if (!token)
+        {
+            navigate(`/login`);
+        }
+        
         try
         {
             fetch(process.env.REACT_APP_PARSE_URL, {
@@ -184,6 +186,12 @@ const Dashboard = () =>
             field: 'createdOn',
             headerName: 'Date Uploaded',
             width: 180,
+            valueGetter: (params) =>
+                new Date(params.row.createdOn).toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                }),
         },
 
         {
