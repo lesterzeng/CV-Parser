@@ -24,6 +24,8 @@ export default function EditForm({ data, onSave, onCancel }) {
     // console.log("EditForm stringify formData:" + str);
   }
 
+
+
   return (
     <form onSubmit={handleSubmit} >
       <Box 
@@ -113,11 +115,16 @@ export default function EditForm({ data, onSave, onCancel }) {
             InputLabelProps={{
               shrink: true,
             }}
-            defaultValue={formData.skill1}
+            defaultValue={formData.skills[0]?.skill_description || ''}
             variant="filled"
             type="text"
-            name="skill1"
-            onChange={handleChange}
+            onChange={(e) => setFormData({
+              ...formData,
+              skills: [
+                { ...formData.skills[0], skill_description: e.target.value },
+                ...formData.skills.slice(1)
+              ]
+            })}
           />
 
           <TextField
@@ -126,11 +133,16 @@ export default function EditForm({ data, onSave, onCancel }) {
             InputLabelProps={{
               shrink: true,
             }}
-            defaultValue={formData.skill2}
+            defaultValue={formData.skills[1]?.skill_description || ''}
             variant="filled"
             type="text"
-            name="skill2"
-            onChange={handleChange}
+            onChange={(e) => setFormData({
+              ...formData,
+              skills: [
+                ...formData.skills.slice(0,1),
+                { ...formData.skills[1], skill_description: e.target.value },
+              ]
+            })}
           />
 
           <TextField
@@ -139,11 +151,16 @@ export default function EditForm({ data, onSave, onCancel }) {
             InputLabelProps={{
               shrink: true,
             }}
-            defaultValue={formData.skill3}
+            defaultValue={formData.skills[2]?.skill_description || ''}
             variant="filled"
             type="text"
-            name="skill3"
-            onChange={handleChange}
+            onChange={(e) => setFormData({
+              ...formData,
+              skills: [
+                ...formData.skills.slice(0,2),
+                { ...formData.skills[2], skill_description: e.target.value },
+              ]
+            })}
           />
         </div>
 
@@ -156,37 +173,52 @@ export default function EditForm({ data, onSave, onCancel }) {
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company1.name}
+            defaultValue={formData.recentCompanies[0]?.company_name || ''}
             variant="filled"
             type="text"
-            name="company1Name"
-            onChange={handleChange}
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                { ...formData.recentCompanies[0], company_name: e.target.value },
+                ...formData.recentCompanies.slice(1)
+              ]
+            })}
           />
 
           <TextField
             id="filled-helperText"
-            label="Date Joined"
+            label="Year Joined"
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company1.joinYear}
+            defaultValue={formData.recentCompanies[0]?.join_year || ''}
             variant="filled"
-            type="date"
-            name="company1joinYear"
-            onChange={handleChange}
+            type="year"
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                { ...formData.recentCompanies[0], join_year: e.target.value },
+                ...formData.recentCompanies.slice(1)
+              ]
+            })}
           />
 
           <TextField
             id="filled-helperText"
-            label="End Date"
+            label="Year Left"
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company1.leaveYear}
+            defaultValue={formData.recentCompanies[0]?.leave_year || ''}
             variant="filled"
-            type="date"
-            name="company1leaveYear"
-            onChange={handleChange}
+            type="year"
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                { ...formData.recentCompanies[0], leave_year: e.target.value },
+                ...formData.recentCompanies.slice(1)
+              ]
+            })}
           />
         </div>
 
@@ -194,14 +226,20 @@ export default function EditForm({ data, onSave, onCancel }) {
           <TextField 
             id="filled-helperText"
             label="Reason for Leaving"
+            style={{ width: '78.5ch' }}
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company1.reasonForLeaving}
+            defaultValue={formData.recentCompanies[0]?.reason_for_leaving || ''}
             variant="filled"
             type="text"
-            name="company1ReasonForLeaving"
-            onChange={handleChange}
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                { ...formData.recentCompanies[0], reason_for_leaving: e.target.value },
+                ...formData.recentCompanies.slice(1)
+              ]
+            })}
           />
         </div>
 
@@ -214,37 +252,52 @@ export default function EditForm({ data, onSave, onCancel }) {
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company2.name}
+            defaultValue={formData.recentCompanies[1]?.company_name || ''}
             variant="filled"
             type="text"
-            name="company2Name"
-            onChange={handleChange}
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                ...formData.recentCompanies.slice(0,1),
+                { ...formData.recentCompanies[1], company_name: e.target.value }
+              ]
+            })}
           />
 
           <TextField
             id="filled-helperText"
-            label="Date Joined"
+            label="Year Joined"
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company2.joinYear}
+            defaultValue={formData.recentCompanies[1]?.join_year || ''}
             variant="filled"
-            type="date"
-            name="company2joinYear"
-            onChange={handleChange}
+            type="year"
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                ...formData.recentCompanies.slice(0,1),
+                { ...formData.recentCompanies[1], join_year: e.target.value }
+              ]
+            })}
           />
 
           <TextField
             id="filled-helperText"
-            label="End Date"
+            label="Year Left"
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company2.leaveYear}
+            defaultValue={formData.recentCompanies[1]?.leave_year || ''}
             variant="filled"
-            type="date"
-            name="company2leaveYear"
-            onChange={handleChange}
+            type="year"
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                ...formData.recentCompanies.slice(0,1),
+                { ...formData.recentCompanies[1], leave_year: e.target.value }
+              ]
+            })}
           />
         </div>
 
@@ -252,14 +305,20 @@ export default function EditForm({ data, onSave, onCancel }) {
           <TextField
             id="filled-helperText"
             label="Reason for Leaving"
+            style={{ width: '78.5ch' }}
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company2.reasonForLeaving}
+            defaultValue={formData.recentCompanies[1]?.reason_for_leaving || ''}
             variant="filled"
             type="text"
-            name="company2ReasonForLeaving"
-            onChange={handleChange}
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                ...formData.recentCompanies.slice(0,1),
+                { ...formData.recentCompanies[1], reason_for_leaving: e.target.value }
+              ]
+            })}
           />
         </div>
 
@@ -272,37 +331,52 @@ export default function EditForm({ data, onSave, onCancel }) {
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company3.name}
+            defaultValue={formData.recentCompanies[2]?.company_name || ''}
             variant="filled"
             type="text"
-            name="company3Name"
-            onChange={handleChange}
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                ...formData.recentCompanies.slice(0,2),
+                { ...formData.recentCompanies[2], company_name: e.target.value }
+              ]
+            })}
           />
 
           <TextField
             id="filled-helperText"
-            label="Date Joined"
+            label="Year Joined"
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company3.joinYear}
+            defaultValue={formData.recentCompanies[2]?.join_year || ''}
             variant="filled"
-            type="date"
-            name="company3joinYear"
-            onChange={handleChange}
+            type="year"
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                ...formData.recentCompanies.slice(0,2),
+                { ...formData.recentCompanies[2], join_year: e.target.value }
+              ]
+            })}
           />
 
           <TextField
             id="filled-helperText"
-            label="End Date"
+            label="Year Left"
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company3.leaveYear}
+            defaultValue={formData.recentCompanies[2]?.leave_year || ''}
             variant="filled"
-            type="date"
-            name="company3leaveYear"
-            onChange={handleChange}
+            type="year"
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                ...formData.recentCompanies.slice(0,2),
+                { ...formData.recentCompanies[2], leave_year: e.target.value }
+              ]
+            })}
           />
         </div>
 
@@ -310,14 +384,20 @@ export default function EditForm({ data, onSave, onCancel }) {
           <TextField
             id="filled-helperText"
             label="Reason for Leaving"
+            style={{ width: '78.5ch' }}
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={formData.company3.reasonForLeaving}
+            defaultValue={formData.recentCompanies[2]?.reason_for_leaving || ''}
             variant="filled"
             type="text"
-            name="company3ReasonForLeaving"
-            onChange={handleChange}
+            onChange={(e) => setFormData({
+              ...formData,
+              recentCompanies: [
+                ...formData.recentCompanies.slice(0,2),
+                { ...formData.recentCompanies[2], reason_for_leaving: e.target.value }
+              ]
+            })}
           />
         </div>
 
@@ -330,11 +410,22 @@ export default function EditForm({ data, onSave, onCancel }) {
             InputLabelProps={{
               shrink: true,
             }}
-            defaultValue={formData.jobList}
+            disabled
+            defaultValue={1}
             variant="filled"
-            type="text"
-            name="jobList"
+            type="number"
+            name="jobsList"
             onChange={handleChange}
+            
+            // defaultValue={formData.jobsList.jobTitle || ''}
+            // variant="filled"
+            // type="text"
+            // onChange={(e) => setFormData({
+            //   ...formData,
+            //   jobsList: 
+            //     { ...formData.jobsList[0], jobTitle: e.target.value },
+            //     ...formData.jobsList.slice(1)
+            // })}
           />
         </div>
       </Box>

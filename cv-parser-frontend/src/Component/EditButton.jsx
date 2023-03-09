@@ -35,7 +35,23 @@ export default function EditButton({ candidate, onSave }) {
         onRequestClose={handleCancel}
         ariaHideApp={false}
         contentLabel="Edit Candidate"
+        style={{
+            content: {
+              width: "820px",
+              top: '20%',
+              left: '25%',
+              right: '25%',
+              bottom: '20%',
+              border: '1px solid #ccc',
+              background: '#fff',
+              overflow: 'auto',
+              borderRadius: '4px',
+              outline: 'none',
+              padding: '20px'
+            }
+          }}
       >
+        
         <EditForm data={candidate} onSave={handleSave} onCancel={handleCancel} />
       </Modal>
     </div>
