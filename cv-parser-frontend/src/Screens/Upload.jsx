@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import "./Upload.css";
 import { useNavigate } from "react-router-dom";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+// import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+// import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import {
    Accordion,
    AccordionDetails,
@@ -12,6 +12,11 @@ import {
    Typography,
    Button,
 } from "@mui/material";
+import CancelIcon from '@mui/icons-material/Cancel';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import AddIcon from '@mui/icons-material/Add';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 function FileUploader() {
    let navigate = useNavigate();
@@ -381,6 +386,7 @@ function FileUploader() {
                   )}
                </div>
                <Button variant="contained" type="submit" disabled={loading}>
+                  <FileUploadIcon/>
                   {loading ? "Uploading..." : "Upload"}
                </Button>
                <Button
@@ -389,6 +395,7 @@ function FileUploader() {
                   onClick={handleClear}
                   disabled={loading}
                >
+                  <CancelIcon/>
                   Clear Currently Selected
                </Button>
                <Button
@@ -397,6 +404,7 @@ function FileUploader() {
                   onClick={handleCancel}
                   disabled={loading}
                >
+                  <DeleteForeverIcon/>
                   Cancel Current Batch
                </Button>
             </div>
@@ -539,10 +547,12 @@ function FileUploader() {
                      handleUploadMode();
                   }}
                >
+                  <AddIcon/>
                   Add More Files
                </Button>
                {/* <Button variant="contained"  type="button">Quick Create</Button> */}
                <Button variant="contained" type="button" onClick={handleParse}>
+                  <LibraryBooksIcon/>
                   Parse & Edit
                </Button>
             </div>
