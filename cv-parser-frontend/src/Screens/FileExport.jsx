@@ -105,7 +105,7 @@ const FileExport = () =>
 {
 
     const location = useLocation();
-    const data = location.state.data;
+    const data = location.state.dataToSend;
 
     // from react-dom to reroute
     let navigate = useNavigate()

@@ -23,7 +23,6 @@ const SearchBox = ({ handleSearch }) => {
                         </InputAdornment>
                     }
                     label="Search"
-                    onChange={handleSearch}
                 />
             </FormControl>
         </div>

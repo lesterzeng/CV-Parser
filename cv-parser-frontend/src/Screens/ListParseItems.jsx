@@ -9,6 +9,11 @@ import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import LoadingButton from '@mui/lab/LoadingButton';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const ListParseItems = () =>
 {
@@ -48,9 +53,14 @@ const ListParseItems = () =>
     const [failedData, setFailedData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedIds, setSelectedIds] = useState([]);
     const [selectedRows, setSelectedRows] = useState({});
+    const [notSelectedRows, setNotSelectedRows] = useState({});
     const [loadingProfileCreate, setLoadingProfileCreate] = useState(false)
+    const [profileClick, setProfileClick] = useState(0)
+    const [open, setOpen] = useState(false);
+    const [dataToSend, setDataToSend] = useState({})
+
+
 
 
 
@@ -122,45 +132,51 @@ const ListParseItems = () =>
 
     const handleCreation = (selectedRows) =>
     {
-        if (Object.keys(selectedRows).length == 0 ){
-            alert("Please select profiles to be created")
-        } else {
-        setLoadingProfileCreate(true)
-        console.log(selectedRows)
-        // const selectedTempKeys = selectedRows.map((row) => row.tempKey);
-        // console.log(selectedTempKeys)
-        const selectedRowsWithoutTempKeys = selectedRows.map(({ tempKey, ...rest }) => rest);
-        console.log(selectedRowsWithoutTempKeys)
-        
-        const headers = {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-            'Content-Type': 'application/json',
-        };
-
-        fetch("http://localhost:8080/cvparser/cand", {
-            method: "POST",
-            headers: headers,
-            body: JSON.stringify(selectedRowsWithoutTempKeys),
-        }).then((response) =>
+        if (Object.keys(selectedRows).length == 0)
         {
-            if (response.ok)
+            alert("Please select profiles to be created")
+        } else
+        {
+            setLoadingProfileCreate(true)
+            console.log(selectedRows + "SELECTED")
+            console.log(notSelectedRows + "NOT SELECTED")
+            // const selectedTempKeys = selectedRows.map((row) => row.tempKey);
+            // console.log(selectedTempKeys)
+            const selectedRowsWithoutTempKeys = selectedRows.map(({ tempKey, ...rest }) => rest);
+            console.log(selectedRowsWithoutTempKeys)
+
+            const headers = {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                'Content-Type': 'application/json',
+            };
+
+            fetch("http://localhost:8080/cvparser/cand", {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(selectedRowsWithoutTempKeys),
+            }).then((response) =>
             {
-                console.log(response)
-                response.json().then((data) =>
+                if (response.ok)
                 {
-                    console.log(data)
-                    //navigate to profiles created screen
-                    navigate("/export", { state: { data } })
-                })
-            } else
-            {
-                // Handle other errors
-            }
-        })
-            .catch((error) =>
-            {
-                alert("Profile creation failed");
-            });
+                    console.log(response)
+                    response.json().then((data) =>
+                    {
+                        console.log(data)
+                        setParseData(notSelectedRows)
+                        setLoadingProfileCreate(false)
+                        setProfileClick(profileClick + 1)
+                        setDataToSend(data)
+
+                    })
+                } else
+                {
+                    // Handle other errors
+                }
+            })
+                .catch((error) =>
+                {
+                    alert("Profile creation failed");
+                });
 
         }
     }
@@ -240,12 +256,32 @@ const ListParseItems = () =>
 
 
     const handleSelection = (ids) =>
-    {     
+    {
         const selectedIDs = new Set(ids);
         const selectedRowData = parseData.filter((row) =>
             selectedIDs.has(row.tempKey));
         setSelectedRows(selectedRowData);
+
+        const notSelectedRowData = parseData.filter((row) =>
+            !selectedIDs.has(row.tempKey));
+        setNotSelectedRows(notSelectedRowData)
     };
+    const handleClickOpen = () =>
+    {
+        setOpen(true);
+    };
+
+    const handleClose = () =>
+    {
+        setOpen(false);
+    };
+
+    const handleFinish = () => 
+    {
+        console.log(dataToSend)
+    navigate("/export", { state: { dataToSend } })
+    }
+
 
     return (
         <div>
@@ -269,7 +305,7 @@ const ListParseItems = () =>
                                     pageSize={5}
                                     rowsPerPageOptions={[5]}
                                     checkboxSelection
-                                        onRowSelectionModelChange={handleSelection}
+                                    onRowSelectionModelChange={handleSelection}
                                 />
                             </div>
                         )}
@@ -315,17 +351,44 @@ const ListParseItems = () =>
                 </Button>
             </Box>
             <Box sx={bottomBox}>
-            
+
                 <LoadingButton
                     variant="contained" endIcon={<ChevronRight />}
                     size="large"
                     sx={btnStyle}
                     onClick={() => handleCreation(selectedRows)}
                     loading={loadingProfileCreate}
-
                 >
                     <span> Create Profiles</span>
                 </LoadingButton>
+
+            </Box>
+            <Box sx={bottomBox}>
+                <Button variant="contained" endIcon={<ChevronRight />} size="large" sx={btnStyle} disabled={profileClick <= 0} onClick={handleClickOpen}>
+                    Finish
+                </Button>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Finish Parsing CVs"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure you want to proceed?
+                            Any unsaved data will be permanently lost.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>No</Button>
+                        <Button onClick={handleFinish} autoFocus>
+                            Yes
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Box>
         </div>
     );

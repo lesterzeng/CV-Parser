@@ -141,6 +141,12 @@ const Dashboard = () =>
             field: 'createdOn',
             headerName: 'Date Uploaded',
             width: 180,
+            valueGetter: (params) =>
+                new Date(params.row.createdOn).toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                }),
         },
 
         {
