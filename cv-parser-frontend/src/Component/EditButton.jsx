@@ -3,6 +3,8 @@ import Modal from "react-modal";
 import EditForm from "./EditForm";
 import Button from "@mui/material/Button";
 import EditIcon from '@mui/icons-material/Edit';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import IconButton from '@mui/material/IconButton';
 import "../css/Edit.css";
 
 export default function EditButton({ candidate, onSave }) {
@@ -29,7 +31,7 @@ export default function EditButton({ candidate, onSave }) {
 
   return (
     <div>
-      <Button onClick={() => setIsEditing(true)}><EditIcon/></Button>
+      <IconButton aria-label="edit" onClick={() => setIsEditing(true)}><EditRoundedIcon /></IconButton>
       <Modal 
         isOpen={isEditing}
         onRequestClose={handleCancel}

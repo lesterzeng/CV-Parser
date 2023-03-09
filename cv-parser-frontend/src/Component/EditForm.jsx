@@ -24,7 +24,17 @@ export default function EditForm({ data, onSave, onCancel }) {
     // console.log("EditForm stringify formData:" + str);
   }
 
-
+  const btnStyle = () =>
+  {
+      return {
+          margin: "0 10px 0 10px",
+          height: "100%",
+          bgcolor: "#461d5c",
+          '&:hover': {
+              bgcolor: "#6a2b8c",
+          }
+      }
+  }
 
   return (
     <form onSubmit={handleSubmit} >
@@ -401,19 +411,19 @@ export default function EditForm({ data, onSave, onCancel }) {
           />
         </div>
 
-        <h2>Job List Id</h2>
+        <h2>Job Title</h2>
 
         <div>
           <TextField
             id="filled-helperText"
-            label="Job List Id"
+            label="Job Title"
             InputLabelProps={{
               shrink: true,
             }}
             disabled
-            defaultValue={1}
+            defaultValue={"Software Developer"}
             variant="filled"
-            type="number"
+            type="text"
             name="jobsList"
             onChange={handleChange}
             
@@ -431,10 +441,10 @@ export default function EditForm({ data, onSave, onCancel }) {
       </Box>
 
       <Stack spacing={2} direction="row-reverse">
-        <Button variant="contained" type="button" onClick={onCancel}>
+        <Button variant="contained" sx={btnStyle} onClick={onCancel}>
           Cancel
         </Button>
-        <Button variant="contained" type="submit">
+        <Button variant="contained" sx={btnStyle} type="submit">
           Save
         </Button>
       </Stack>

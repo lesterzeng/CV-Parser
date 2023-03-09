@@ -9,6 +9,8 @@ import "../Component/UploadSearch.css"
 import NavBar from '../Component/Navbar';
 import ExportButton from '../Component/ExportButton';
 import EditButton from "../Component/EditButton";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Dashboard = () =>
 {
@@ -214,12 +216,12 @@ const Dashboard = () =>
             width: 100,
             sortable: false,
             renderCell: (params) => (
-                <button
+                <IconButton aria-label="delete"
                     className='btn btn-sm btn-danger'
                     onClick={() => handleDelete(params.row.id, params.row.firstName)}
                 >
-                    Delete
-                </button>
+                     <DeleteIcon />
+                </IconButton>
             ),
         },
     ];
