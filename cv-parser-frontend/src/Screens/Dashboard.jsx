@@ -125,6 +125,34 @@ const Dashboard = () =>
         });
     }
     
+
+    const updateList = () =>
+    {
+        try
+        {
+            fetch(process.env.REACT_APP_PARSE_URL, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then((data) =>
+                {
+                    console.log(data);
+                    const failedRows = data.filter((row) => !row.email || !row.firstName || !row.lastName);
+                    setFailedData(failedRows);
+                    const successfulRows = data.filter((row) => row.email && row.firstName && row.lastName);
+                    setParseData(successfulRows);
+                    setLoading(false);
+                });
+        } catch (error)
+        {
+
+        }
+    }
+
     const handleDelete = (id, firstName) =>
     {
         try
@@ -139,8 +167,7 @@ const Dashboard = () =>
                     .then((res) => res.json())
                     .then(data =>
                     {
-                        setParseData([...parseData, data])
-                        setParseData("")
+                        updateList()
                     })
             }
         } catch (error)
